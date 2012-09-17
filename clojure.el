@@ -17,17 +17,49 @@
   "Detect and create number tokens."
   (concat "[-+]?" semantic-lex-number-expression) 'NUMBER)
 
-(define-lex-simple-regex-analyzer wisent-clojure-lex-punctuation
-  "Detect and create punctuation tokens."
-  "\\(\\s.\\|\\s$\\|\\s'\\)" (char-after))
+(define-lex-simple-regex-analyzer wisent-clojure-lex-string
+  "Detect strings"
+  "\".*\"" 'STRING)
+
+(define-lex-simple-regex-analyzer wisent-clojure-lex-quote
+  "Detect a quote"
+  "'" 'QUOTE)
+
+(define-lex-simple-regex-analyzer wisent-clojure-lex-deref
+  "Detect a deref"
+  "@" 'DEREF)
+
+(define-lex-simple-regex-analyzer wisent-clojure-lex-meta
+  "Detect a meta"
+  "\\^" 'META)
+
+(define-lex-simple-regex-analyzer wisent-clojure-lex-syntaxquote
+  "Detect a syntaxquote"
+  "`" 'SYNTAXQUOTE)
+
+(define-lex-simple-regex-analyzer wisent-clojure-lex-unquote
+  "Detect an unquote"
+  "~" 'UNQUOTE)
+
+;; (define-lex-simple-regex-analyzer wisent-clojure-lex-punctuation
+;;   "Detect and create punctuation tokens."
+;;   "\\(\\s.\\|\\s$\\|\\s'\\)" (char-after))
 
 (define-lex wisent-clojure-lexer
   "Clojure lexical analyzer."
   ;; semantic-lex-ignore-whitespace
   ;; semantic-lex-ignore-newline
+  ;; semantic-lex-ignore-comments
+  wisent-clojure-lex-unquote
+  wisent-clojure-lex-quote
+  wisent-clojure-lex-syntaxquote
+  wisent-clojure-lex-meta
+  wisent-clojure-lex-deref 
+  wisent-clojure-lex-quote
+  wisent-clojure-lex-string
   wisent-clojure-lex-ratio
   wisent-clojure-lex-number
-  ;; wisent-clojure-lex-symbol
+  wisent-clojure-lex-symbol
   ;; wisent-clojure-lex-punctuation
   semantic-lex-default-action
   
@@ -60,10 +92,10 @@
         (numbers '("1"
                    "43"))
         (floats '("3.14156"
-                  "-1.678") 
-                )
+                  "-1.678"))
+        (strings '("\"hello\""))
         )
-    (dolist (exp (append  ratios numbers floats))
+    (dolist (exp (append symbols ratios numbers floats strings))
       (message "Test %s " exp) 
       (message "exp: %s " (wisent-clojure exp)))))
 

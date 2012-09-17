@@ -32,6 +32,8 @@
 %token <number> NUMBER
 %token <symbol> SYMBOL
 %token <ratio> RATIO
+%token <string> STRING
+%token <meta> META
 
 %token <open-paren>  LPAREN      "("
 %token <close-paren> RPAREN      ")"
@@ -67,6 +69,8 @@ atom:
     RATIO
     (make-symbol $1)
   | NUMBER
+    (make-symbol $1)
+  | STRING
     (make-symbol $1)
 
   ;
