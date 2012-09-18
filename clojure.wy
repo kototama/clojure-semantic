@@ -29,11 +29,20 @@
 
 %languagemode  clojure-mode
 
+;; %type  <block>
+
+;; %token <block>       PAREN_BLOCK "(LPAREN RPAREN)"
+;; %token <block>       BRACE_BLOCK "(LBRACE RBRACE)"
+;; %token <block>       BRACK_BLOCK "(LBRACK RBRACK)"
+
 %token <number> NUMBER
 %token <symbol> SYMBOL
 %token <ratio> RATIO
 %token <string> STRING
 %token <meta> META
+
+%type  <string>      ;;syntax "\\s\"" matchdatatype sexp
+%token <string>      STRING
 
 %token <open-paren>  LPAREN      "("
 %token <close-paren> RPAREN      ")"
@@ -44,29 +53,24 @@
 
 %%
 
-;; input:
-;;     line
-;;   | input line
-;;     (format "%s %s" $1 $2)
-;;   ;
-
-;; line:
-;;     ';'
-;;     {";"}
-;;   | exp ';'
-;;     (format "%s;" $1)
-;;   | error ';'
-;;     {"Error;"}
-;;   ;
-input:
+clojure-expr:
     atom
+  | list
     ;
+
+list: LPAREN atom RPAREN
+      (list 'list $2)
+    ;
+
+list-content:
+    clojure-expr
+  | clojure-expr list-content
+  ;
 
 atom:
     SYMBOL
     (make-symbol $1)
-  |
-    RATIO
+  | RATIO
     (make-symbol $1)
   | NUMBER
     (make-symbol $1)

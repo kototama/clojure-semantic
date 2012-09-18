@@ -17,9 +17,9 @@
   "Detect and create number tokens."
   (concat "[-+]?" semantic-lex-number-expression) 'NUMBER)
 
-(define-lex-simple-regex-analyzer wisent-clojure-lex-string
-  "Detect strings"
-  "\".*\"" 'STRING)
+;; (define-lex-simple-regex-analyzer wisent-clojure-lex-string
+;;   "Detect strings"
+;;   "!hello!" 'STRING)
 
 (define-lex-simple-regex-analyzer wisent-clojure-lex-quote
   "Detect a quote"
@@ -41,6 +41,14 @@
   "Detect an unquote"
   "~" 'UNQUOTE)
 
+(define-lex-simple-regex-analyzer wisent-clojure-lex-lparen
+  "Detect left parenthesis"
+  "(" 'LPAREN)
+
+(define-lex-simple-regex-analyzer wisent-clojure-lex-rparen
+  "Detect right parenthesis"
+  ")" 'RPAREN)
+
 ;; (define-lex-simple-regex-analyzer wisent-clojure-lex-punctuation
 ;;   "Detect and create punctuation tokens."
 ;;   "\\(\\s.\\|\\s$\\|\\s'\\)" (char-after))
@@ -48,19 +56,25 @@
 (define-lex wisent-clojure-lexer
   "Clojure lexical analyzer."
   ;; semantic-lex-ignore-whitespace
-  ;; semantic-lex-ignore-newline
-  ;; semantic-lex-ignore-comments
-  wisent-clojure-lex-unquote
-  wisent-clojure-lex-quote
-  wisent-clojure-lex-syntaxquote
-  wisent-clojure-lex-meta
-  wisent-clojure-lex-deref 
-  wisent-clojure-lex-quote
-  wisent-clojure-lex-string
-  wisent-clojure-lex-ratio
-  wisent-clojure-lex-number
-  wisent-clojure-lex-symbol
+  ;; ;; semantic-lex-ignore-newline
+  ;; ;; semantic-lex-ignore-comments
+  ;; wisent-clojure-lex-rparen
+  ;; wisent-clojure-lex-lparen
+  ;; wisent-clojure-lex-unquote
+  ;; wisent-clojure-lex-quote
+  ;; wisent-clojure-lex-syntaxquote
+  ;; wisent-clojure-lex-meta
+  ;; wisent-clojure-lex-deref 
+  ;; wisent-clojure-lex-quote
+  ;; wisent-clojure-lex-string
+  
+  ;; wisent-clojure-lex-ratio
+  ;; wisent-clojure-lex-number
+  ;; wisent-clojure-lex-symbol
   ;; wisent-clojure-lex-punctuation
+  ;; generated:
+  wisent-clojure-wy--<string>-sexp-analyzer
+  
   semantic-lex-default-action
   
   )
@@ -94,10 +108,13 @@
         (floats '("3.14156"
                   "-1.678"))
         (strings '("\"hello\""))
+        (lists '("(ato)"))
         )
-    (dolist (exp (append symbols ratios numbers floats strings))
+    (dolist (exp strings;; ;; (append symbols ratios numbers floats strings)
+                 )
       (message "Test %s " exp) 
-      (message "exp: %s " (wisent-clojure exp)))))
+      (message "exp: %s " (wisent-clojure exp))
+      )))
 
 (wisent-clojure-utest)
 
