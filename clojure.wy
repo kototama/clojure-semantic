@@ -28,28 +28,30 @@
 %provide semantic/wisent/clojure-wy
 
 %languagemode  clojure-mode
-
-;; %type  <block>
-
-;; %token <block>       PAREN_BLOCK "(LPAREN RPAREN)"
-;; %token <block>       BRACE_BLOCK "(LBRACE RBRACE)"
-;; %token <block>       BRACK_BLOCK "(LBRACK RBRACK)"
-
+%start         clojure-expr
+        
 %token <number> NUMBER
 %token <symbol> SYMBOL
 %token <ratio> RATIO
 %token <string> STRING
 %token <meta> META
 
+%type  <block>       ;;syntax "\\s(\\|\\s)" matchdatatype block
+%token <block>       PAREN_BLOCK "(LPAREN RPAREN)"
+%token <block>       BRACE_BLOCK "(LBRACE RBRACE)"
+%token <block>       BRACK_BLOCK "(LBRACK RBRACK)"
+
+%token <open-paren>  LPAREN  "("
+%token <close-paren>  RPAREN ")"
+
+%token <open-paren>  LBRACE  "{"
+%token <close-paren> RBRACE  "}"
+
+%token <open-paren>  LBRACK  "["
+%token <close-paren> RBRACK  "]"
+
 %type  <string>      ;;syntax "\\s\"" matchdatatype sexp
 %token <string>      STRING
-
-%token <open-paren>  LPAREN      "("
-%token <close-paren> RPAREN      ")"
-%token <open-paren>  LBRACE      "{"
-%token <close-paren> RBRACE      "}"
-%token <open-paren>  LBRACK      "["
-%token <close-paren> RBRACK      "]"
 
 %%
 
@@ -59,7 +61,7 @@ clojure-expr:
     ;
 
 list: LPAREN atom RPAREN
-      (list 'list $2)
+      (list 'm $2)
     ;
 
 list-content:

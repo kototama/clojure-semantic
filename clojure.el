@@ -17,10 +17,6 @@
   "Detect and create number tokens."
   (concat "[-+]?" semantic-lex-number-expression) 'NUMBER)
 
-;; (define-lex-simple-regex-analyzer wisent-clojure-lex-string
-;;   "Detect strings"
-;;   "!hello!" 'STRING)
-
 (define-lex-simple-regex-analyzer wisent-clojure-lex-quote
   "Detect a quote"
   "'" 'QUOTE)
@@ -58,20 +54,19 @@
   ;; semantic-lex-ignore-whitespace
   ;; ;; semantic-lex-ignore-newline
   ;; ;; semantic-lex-ignore-comments
-  ;; wisent-clojure-lex-rparen
-  ;; wisent-clojure-lex-lparen
-  ;; wisent-clojure-lex-unquote
-  ;; wisent-clojure-lex-quote
-  ;; wisent-clojure-lex-syntaxquote
-  ;; wisent-clojure-lex-meta
-  ;; wisent-clojure-lex-deref 
-  ;; wisent-clojure-lex-quote
-  ;; wisent-clojure-lex-string
+  wisent-clojure-lex-rparen
+  wisent-clojure-lex-lparen
+  wisent-clojure-lex-unquote
+  wisent-clojure-lex-quote
+  wisent-clojure-lex-syntaxquote
+  wisent-clojure-lex-meta
+  wisent-clojure-lex-deref 
+  wisent-clojure-lex-quote
+  wisent-clojure-lex-string
   
-  ;; wisent-clojure-lex-ratio
-  ;; wisent-clojure-lex-number
+  wisent-clojure-lex-ratio
+  wisent-clojure-lex-number
   ;; wisent-clojure-lex-symbol
-  ;; wisent-clojure-lex-punctuation
   ;; generated:
   wisent-clojure-wy--<string>-sexp-analyzer
   
@@ -108,13 +103,11 @@
         (floats '("3.14156"
                   "-1.678"))
         (strings '("\"hello\""))
-        (lists '("(ato)"))
+        (lists '("(42)"))
         )
-    (dolist (exp strings;; ;; (append symbols ratios numbers floats strings)
-                 )
+    (dolist (exp (append ratios numbers floats strings lists))
       (message "Test %s " exp) 
-      (message "exp: %s " (wisent-clojure exp))
-      )))
+      (message "Exp: %s "(wisent-clojure exp)))))
 
 (wisent-clojure-utest)
 
