@@ -55,31 +55,30 @@
 
 %%
 
-clojure-expr:
-    atom
-  | list
+clojure-expr: atom
+            | list
+            ;
+
+list: LPAREN list-content RPAREN
+      (list $2)
     ;
 
-list: LPAREN atom RPAREN
-      (list 'm $2)
+list-content: clojure-expr
+            | list-content clojure-expr
+              (message "list-content %s " $1)
+              (message "clojure-expr %s " $2)
+              (append $1 $2)
+            ;
+
+atom: SYMBOL
+      (list (make-symbol $1))
+    | RATIO
+      (list (make-symbol $1))
+    | NUMBER
+      (list (make-symbol $1))
+    | STRING
+      (list (make-symbol $1))
     ;
-
-list-content:
-    clojure-expr
-  | clojure-expr list-content
-  ;
-
-atom:
-    SYMBOL
-    (make-symbol $1)
-  | RATIO
-    (make-symbol $1)
-  | NUMBER
-    (make-symbol $1)
-  | STRING
-    (make-symbol $1)
-
-  ;
 
 %%
 

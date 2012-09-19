@@ -3,7 +3,7 @@
 
 (define-lex-simple-regex-analyzer wisent-clojure-lex-symbol
   "Detect and create symbols tokens."
-  "[^]0-9(){}#[]+"
+  "[^]0-9(){}#[][^](){}#[]*"
   'SYMBOL)
 
 (define-lex-simple-regex-analyzer wisent-clojure-lex-ratio
@@ -50,7 +50,7 @@
 
 (define-lex wisent-clojure-lexer
   "Clojure lexical analyzer."
-  ;; semantic-lex-ignore-whitespace
+  semantic-lex-ignore-whitespace
   ;; ;; semantic-lex-ignore-newline
   ;; ;; semantic-lex-ignore-comments
   wisent-clojure-lex-rparen
@@ -84,6 +84,7 @@
   "Test"
   (interactive)
   (let ((symbols '("asymbol"
+                   "list1"
                    ":asymbol"
                    "a-symbol"
                    ":key"
@@ -100,7 +101,9 @@
                   "-1.678"))
         (strings '("\"hello\""))
         (lists '("(42)"
-                 "(list)"
+                 "(take)"
+                 "(list 'a 'b 'c)"
+                 "(list1 (list2 'a b))"
                  ))
         )
     (dolist (exp (append symbols ratios numbers floats strings lists))
