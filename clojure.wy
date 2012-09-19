@@ -36,10 +36,10 @@
 %token <string> STRING
 %token <meta> META
 
-%type  <block>       ;;syntax "\\s(\\|\\s)" matchdatatype block
-%token <block>       PAREN_BLOCK "(LPAREN RPAREN)"
-%token <block>       BRACE_BLOCK "(LBRACE RBRACE)"
-%token <block>       BRACK_BLOCK "(LBRACK RBRACK)"
+;; %type  <block>       ;;syntax "\\s(\\|\\s)" matchdatatype block
+;; %token <block>       PAREN_BLOCK "(LPAREN RPAREN)"
+;; %token <block>       BRACE_BLOCK "(LBRACE RBRACE)"
+;; %token <block>       BRACK_BLOCK "(LBRACK RBRACK)"
 
 %token <open-paren>  LPAREN  "("
 %token <close-paren>  RPAREN ")"
@@ -50,7 +50,7 @@
 %token <open-paren>  LBRACK  "["
 %token <close-paren> RBRACK  "]"
 
-%type  <string>      ;;syntax "\\s\"" matchdatatype sexp
+%type  <string>
 %token <string>      STRING
 
 %%

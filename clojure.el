@@ -3,8 +3,7 @@
 
 (define-lex-simple-regex-analyzer wisent-clojure-lex-symbol
   "Detect and create symbols tokens."
-  ;; Original Java regexp: "[:]?([\\D&&[^/]].*/)?([\\D&&[^/]][^/]*)"
-  ":?\\([^[:digit:]/].*/\\)?[^[:digit:]/][^/]*"
+  "[^]0-9(){}#[]+"
   'SYMBOL)
 
 (define-lex-simple-regex-analyzer wisent-clojure-lex-ratio
@@ -62,14 +61,11 @@
   wisent-clojure-lex-meta
   wisent-clojure-lex-deref 
   wisent-clojure-lex-quote
-  wisent-clojure-lex-string
-  
   wisent-clojure-lex-ratio
   wisent-clojure-lex-number
-  ;; wisent-clojure-lex-symbol
+  wisent-clojure-lex-symbol
   ;; generated:
-  wisent-clojure-wy--<string>-sexp-analyzer
-  
+  ;; wisent-clojure-wy--<string>-sexp-analyzer
   semantic-lex-default-action
   
   )
@@ -103,11 +99,14 @@
         (floats '("3.14156"
                   "-1.678"))
         (strings '("\"hello\""))
-        (lists '("(42)"))
+        (lists '("(42)"
+                 "(list)"
+                 ))
         )
-    (dolist (exp (append ratios numbers floats strings lists))
+    (dolist (exp (append symbols ratios numbers floats strings lists))
       (message "Test %s " exp) 
-      (message "Exp: %s "(wisent-clojure exp)))))
+      (message "Exp: %s "(wisent-clojure exp))
+      )))
 
 (wisent-clojure-utest)
 
