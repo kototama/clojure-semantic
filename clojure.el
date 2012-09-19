@@ -3,7 +3,7 @@
 
 (define-lex-simple-regex-analyzer wisent-clojure-lex-symbol
   "Detect and create symbols tokens."
-  "[^]0-9(){}# [][^](){}# []*"
+  "[^]0-9(){} [][^](){} []*"
   'SYMBOL)
 
 (define-lex-simple-regex-analyzer wisent-clojure-lex-ratio
@@ -36,11 +36,57 @@
   "Detect an unquote"
   "~" 'UNQUOTE)
 
+(define-lex-simple-regex-analyzer wisent-clojure-lex-meta-reader
+  ""
+  "#^" 'META_READER)
+
+(define-lex-simple-regex-analyzer wisent-clojure-lex-var-reader
+  ""
+  "#'" 'VAR_READER)
+
+(define-lex-simple-regex-analyzer wisent-clojure-lex-regex-reader
+  ""
+  "#\\\".*\\\"" 'REGEX_READER)
+
+(define-lex-simple-regex-analyzer wisent-clojure-lex-fn-reader
+  ""
+  "#(" 'FN_READER)
+
+(define-lex-simple-regex-analyzer wisent-clojure-lex-set-reader
+  ""
+  "#{" 'SET_READER)
+
+(define-lex-simple-regex-analyzer wisent-clojure-lex-eval-reader
+  ""
+  "#=" 'EVAL_READER)
+
+(define-lex-simple-regex-analyzer wisent-clojure-lex-comment-reader
+  ""
+  "#!" 'COMMENT_READER)
+
+(define-lex-simple-regex-analyzer wisent-clojure-lex-unreadable-reader
+  ""
+  "#!" 'UNREADABLE_READER)
+
+(define-lex-simple-regex-analyzer wisent-clojure-lex-discard-reader
+  ""
+  "#_" 'DISCARD_READER)
+
+
 (define-lex wisent-clojure-lexer
   "Clojure lexical analyzer."
   semantic-lex-ignore-whitespace
   semantic-lex-ignore-newline
   semantic-lex-ignore-comments
+  wisent-clojure-lex-discard-reader
+  wisent-clojure-lex-unreadable-reader
+  wisent-clojure-lex-comment-reader
+  wisent-clojure-lex-eval-reader
+  wisent-clojure-lex-fn-reader
+  wisent-clojure-lex-set-reader
+  wisent-clojure-lex-regex-reader
+  wisent-clojure-lex-meta-reader
+  wisent-clojure-lex-var-reader
   wisent-clojure-lex-unquote
   wisent-clojure-lex-quote
   wisent-clojure-lex-syntaxquote
