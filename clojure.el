@@ -3,7 +3,7 @@
 
 (define-lex-simple-regex-analyzer wisent-clojure-lex-symbol
   "Detect and create symbols tokens."
-  "[^]0-9(){}#[][^](){}#[]*"
+  "[^]0-9(){}# [][^](){}# []*"
   'SYMBOL)
 
 (define-lex-simple-regex-analyzer wisent-clojure-lex-ratio
@@ -39,8 +39,8 @@
 (define-lex wisent-clojure-lexer
   "Clojure lexical analyzer."
   semantic-lex-ignore-whitespace
-  ;; ;; semantic-lex-ignore-newline
-  ;; ;; semantic-lex-ignore-comments
+  semantic-lex-ignore-newline
+  semantic-lex-ignore-comments
   wisent-clojure-lex-unquote
   wisent-clojure-lex-quote
   wisent-clojure-lex-syntaxquote
@@ -49,10 +49,9 @@
   wisent-clojure-lex-quote
   wisent-clojure-lex-ratio
   wisent-clojure-lex-number
-  wisent-clojure-lex-symbol
-  ;; generated:
   wisent-clojure-wy--<string>-sexp-analyzer
   wisent-clojure-wy--<block>-block-analyzer
+  wisent-clojure-lex-symbol
   semantic-lex-default-action
   
   )
@@ -76,8 +75,7 @@
                    "a-symbol"
                    ":key"
                    "::key"
-                   "qualified/symbol"
-                   ))
+                   "qualified/symbol"))
         (ratios '("1/9"
                   "+1/4"
                   "-1/5"
@@ -89,9 +87,10 @@
         (strings '("\"hello\""))
         (lists '("(42)"
                  "(take)"
-                 "(list 'a 'b 'c)"
-                 "(list1 (list2 'a b))"))
-        (vectors '("[:a]")))
+                 "(list a b c)"
+                 "(list1 (list2 a b))"))
+        (vectors '("[:a]"
+                   "(vec1 (vec2 a b))")))
     (dolist (exp (append symbols ratios numbers floats strings
                          lists vectors))
       (message "Test %s " exp) 
