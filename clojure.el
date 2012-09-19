@@ -36,25 +36,11 @@
   "Detect an unquote"
   "~" 'UNQUOTE)
 
-(define-lex-simple-regex-analyzer wisent-clojure-lex-lparen
-  "Detect left parenthesis"
-  "(" 'LPAREN)
-
-(define-lex-simple-regex-analyzer wisent-clojure-lex-rparen
-  "Detect right parenthesis"
-  ")" 'RPAREN)
-
-;; (define-lex-simple-regex-analyzer wisent-clojure-lex-punctuation
-;;   "Detect and create punctuation tokens."
-;;   "\\(\\s.\\|\\s$\\|\\s'\\)" (char-after))
-
 (define-lex wisent-clojure-lexer
   "Clojure lexical analyzer."
   semantic-lex-ignore-whitespace
   ;; ;; semantic-lex-ignore-newline
   ;; ;; semantic-lex-ignore-comments
-  wisent-clojure-lex-rparen
-  wisent-clojure-lex-lparen
   wisent-clojure-lex-unquote
   wisent-clojure-lex-quote
   wisent-clojure-lex-syntaxquote
@@ -65,7 +51,8 @@
   wisent-clojure-lex-number
   wisent-clojure-lex-symbol
   ;; generated:
-  ;; wisent-clojure-wy--<string>-sexp-analyzer
+  wisent-clojure-wy--<string>-sexp-analyzer
+  wisent-clojure-wy--<block>-block-analyzer
   semantic-lex-default-action
   
   )
@@ -103,13 +90,12 @@
         (lists '("(42)"
                  "(take)"
                  "(list 'a 'b 'c)"
-                 "(list1 (list2 'a b))"
-                 ))
-        )
-    (dolist (exp (append symbols ratios numbers floats strings lists))
+                 "(list1 (list2 'a b))"))
+        (vectors '("[:a]")))
+    (dolist (exp (append symbols ratios numbers floats strings
+                         lists vectors))
       (message "Test %s " exp) 
-      (message "Exp: %s "(wisent-clojure exp))
-      )))
+      (message "Exp: %s "(wisent-clojure exp)))))
 
 (wisent-clojure-utest)
 

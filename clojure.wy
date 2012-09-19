@@ -36,10 +36,10 @@
 %token <string> STRING
 %token <meta> META
 
-;; %type  <block>       ;;syntax "\\s(\\|\\s)" matchdatatype block
-;; %token <block>       PAREN_BLOCK "(LPAREN RPAREN)"
-;; %token <block>       BRACE_BLOCK "(LBRACE RBRACE)"
-;; %token <block>       BRACK_BLOCK "(LBRACK RBRACK)"
+%type  <block>       ;;syntax "\\s(\\|\\s)" matchdatatype block
+%token <block>       PAREN_BLOCK "(LPAREN RPAREN)"
+%token <block>       BRACE_BLOCK "(LBRACE RBRACE)"
+%token <block>       BRACK_BLOCK "(LBRACK RBRACK)"
 
 %token <open-paren>  LPAREN  "("
 %token <close-paren>  RPAREN ")"
@@ -57,15 +57,26 @@
 
 clojure-expr: atom
             | list
+            | map
+            | vector
             ;
 
-list: LPAREN list-content RPAREN
+list: LPAREN coll-content RPAREN
       (list $2)
     ;
 
-list-content: clojure-expr
-            | list-content clojure-expr
-              (message "list-content %s " $1)
+map: LBRACE coll-content RBRACE
+     (list $2)
+     ;
+
+vector: LBRACK coll-content RBRACK
+        (message "vector!")
+        (list $2)
+    ;
+
+coll-content: clojure-expr
+            | coll-content clojure-expr
+              (message "coll-content %s " $1)
               (message "clojure-expr %s " $2)
               (append $1 $2)
             ;
