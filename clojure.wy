@@ -33,7 +33,6 @@
 %token <number> NUMBER
 %token <symbol> SYMBOL
 %token <ratio> RATIO
-%token <string> STRING
 %token <meta> META
 
 %token <set_reader> SET_READER
@@ -43,6 +42,10 @@
 %keyword DEF     "def"
 %keyword DEFN    "defn"
 %keyword DEFN-   "defn-"
+
+%type <macroreader>
+
+%token <macroreader> META_READER "#^"
 
 %type  <block>       ;;syntax "\\s(\\|\\s)" matchdatatype block
 %token <block>       PAREN_BLOCK "(LPAREN RPAREN)"
@@ -71,20 +74,27 @@ clojure-expr: atom
             ;
 
 list: LPAREN coll-content RPAREN
-      (list $2)
+      (list 'LIST $2)
+    | LPAREN RPAREN
+      (list 'LIST)
     ;
 
 map: LBRACE coll-content RBRACE
-     (list $2)
+     (list 'MAP $2)
+   | LBRACE RBRACE
+     (list 'MAP)
      ;
 
 vector: LBRACK coll-content RBRACK
-        (message "vector!")
-        (list $2)
+        (list 'VECTOR $2)
+      | LBRACK RBRACK
+        (list 'VECTOR)
     ;
 
 set: SET_READER coll-content RBRACE
-     (list 'set $2)
+     (list 'SET $2)
+   | SET_READER RBRACE
+     (list 'SET)
      ;
 
 coll-content: clojure-expr
@@ -96,8 +106,8 @@ coll-content: clojure-expr
               (list 'DEFN- $2)
             | coll-content clojure-expr
               (append $1 $2)
-            | ;; empty
-              (list 'EMPTY)
+            ;; | ;; empty
+            ;;   (list 'EMPTY)
             ;
 
 atom: SYMBOL
