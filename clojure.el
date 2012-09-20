@@ -153,14 +153,15 @@
                  "(list1 (list2 a b))"))
         (vectors '("[:a]"
                    "(vec1 (vec2 a b))"))
+        (mixs '("(list (fn []))"))
         (sets '("#{:a :b}"))
         (defs '("(def x 10)"
-                "(defn x 30)"
-                ;; "(defn- y (fn []))"
+                "(defn x (fn []))"
+                "(defn- y (fn []))"
                 ))
         )
     (dolist (exp (append symbols ratios numbers floats strings
-                         lists vectors sets defs))
+                         lists vectors mixs sets defs))
       (message "Test %s " exp) 
       (message "Exp: %s "(wisent-clojure exp)))))
 

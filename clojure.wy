@@ -41,8 +41,8 @@
 %type  <keyword>
 
 %keyword DEF     "def"
-%keyword DEFN     "defn"
-%keyword DEFN-     "defn-"
+%keyword DEFN    "defn"
+%keyword DEFN-   "defn-"
 
 %type  <block>       ;;syntax "\\s(\\|\\s)" matchdatatype block
 %token <block>       PAREN_BLOCK "(LPAREN RPAREN)"
@@ -96,6 +96,8 @@ coll-content: clojure-expr
               (list 'DEFN- $2)
             | coll-content clojure-expr
               (append $1 $2)
+            | ;; empty
+              (list 'EMPTY)
             ;
 
 atom: SYMBOL
