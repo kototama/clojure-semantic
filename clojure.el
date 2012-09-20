@@ -1,9 +1,11 @@
 (require 'semantic/wisent)
 (require 'semantic/wisent/clojure-wy)
 
+;; TODO: problem with whitespaces + symbols
+
 (define-lex-simple-regex-analyzer wisent-clojure-lex-symbol
   "Detect and create symbols tokens."
-  "[^]0-9(){} [][^](){} []*"
+  "[^] \n\t0-9(){}[][^] \t\n(){}[]*"
   'SYMBOL)
 
 (define-lex-simple-regex-analyzer wisent-clojure-lex-ratio

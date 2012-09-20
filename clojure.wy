@@ -97,8 +97,6 @@ atom: SYMBOL
   "Setup buffer for parse."
   (wisent-clojure-wy--install-parser)
   (setq semantic-lex-analyzer 'wisent-clojure-lexer
-        semantic-lex-depth nil
-        )
-  )
+        semantic-lex-depth nil))
 
 ;;; semantic/wisent/clojure.wy ends here
