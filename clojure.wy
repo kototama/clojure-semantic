@@ -36,6 +36,14 @@
 %token <string> STRING
 %token <meta> META
 
+%token <set_reader> SET_READER
+
+%type  <keyword>
+
+%keyword DEF     "def"
+%keyword DEFN     "defn"
+%keyword DEFN-     "defn-"
+
 %type  <block>       ;;syntax "\\s(\\|\\s)" matchdatatype block
 %token <block>       PAREN_BLOCK "(LPAREN RPAREN)"
 %token <block>       BRACE_BLOCK "(LBRACE RBRACE)"
@@ -59,6 +67,7 @@ clojure-expr: atom
             | list
             | map
             | vector
+            | set
             ;
 
 list: LPAREN coll-content RPAREN
@@ -74,10 +83,18 @@ vector: LBRACK coll-content RBRACK
         (list $2)
     ;
 
+set: SET_READER coll-content RBRACE
+     (list 'set $2)
+     ;
+
 coll-content: clojure-expr
+            | DEF SYMBOL clojure-expr
+              (list 'DEF $2)
+            | DEFN SYMBOL clojure-expr
+              (list 'DEFN $2)
+            | DEFN- SYMBOL clojure-expr
+              (list 'DEFN- $2)
             | coll-content clojure-expr
-              (message "coll-content %s " $1)
-              (message "clojure-expr %s " $2)
               (append $1 $2)
             ;
 

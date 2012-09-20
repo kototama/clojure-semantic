@@ -3,6 +3,11 @@
 
 ;; TODO: problem with whitespaces + symbols
 
+;; (define-lex-simple-regex-analyzer wisent-clojure-lex-def
+;;   "Detect and create def."
+;;   "def"
+;;   'DEF)
+
 (define-lex-simple-regex-analyzer wisent-clojure-lex-symbol
   "Detect and create symbols tokens."
   "[^] \n\t0-9(){}[][^] \t\n(){}[]*"
@@ -80,6 +85,7 @@
   semantic-lex-ignore-whitespace
   semantic-lex-ignore-newline
   semantic-lex-ignore-comments
+  ;; wisent-clojure-lex-def
   wisent-clojure-lex-discard-reader
   wisent-clojure-lex-unreadable-reader
   wisent-clojure-lex-comment-reader
@@ -99,6 +105,7 @@
   wisent-clojure-lex-number
   wisent-clojure-wy--<string>-sexp-analyzer
   wisent-clojure-wy--<block>-block-analyzer
+  wisent-clojure-wy--<keyword>-keyword-analyzer
   wisent-clojure-lex-symbol
   semantic-lex-default-action
   
@@ -111,8 +118,15 @@
     (semantic-lex-init)
     (insert input)
     (let* ((wisent-lex-istream (semantic-lex-buffer))
-	   (answer (wisent-parse semantic--parse-table 'wisent-lex)))
+           (answer (wisent-parse semantic--parse-table 'wisent-lex)))
       answer)))
+
+(defun wisent-clojure-utest-parse-core
+  ()
+  (switch-to-buffer "core.clj")
+  (let* ((wisent-lex-istream (semantic-lex-buffer))
+           (answer (wisent-parse semantic--parse-table 'wisent-lex)))
+      answer))
 
 (defun wisent-clojure-utest ()
   "Test"
@@ -138,9 +152,15 @@
                  "(list a b c)"
                  "(list1 (list2 a b))"))
         (vectors '("[:a]"
-                   "(vec1 (vec2 a b))")))
+                   "(vec1 (vec2 a b))"))
+        (sets '("#{:a :b}"))
+        (defs '("(def x 10)"
+                "(defn x 30)"
+                ;; "(defn- y (fn []))"
+                ))
+        )
     (dolist (exp (append symbols ratios numbers floats strings
-                         lists vectors))
+                         lists vectors sets defs))
       (message "Test %s " exp) 
       (message "Exp: %s "(wisent-clojure exp)))))
 
