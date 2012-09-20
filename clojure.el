@@ -43,58 +43,17 @@
   "Detect an unquote"
   "~" 'UNQUOTE)
 
-(define-lex-simple-regex-analyzer wisent-clojure-lex-meta-reader
-  ""
-  "#^" 'META_READER)
-
-(define-lex-simple-regex-analyzer wisent-clojure-lex-var-reader
-  ""
-  "#'" 'VAR_READER)
-
 (define-lex-simple-regex-analyzer wisent-clojure-lex-regex-reader
   ""
   "#\\\".*\\\"" 'REGEX_READER)
-
-(define-lex-simple-regex-analyzer wisent-clojure-lex-fn-reader
-  ""
-  "#(" 'FN_READER)
-
-(define-lex-simple-regex-analyzer wisent-clojure-lex-set-reader
-  ""
-  "#{" 'SET_READER)
-
-(define-lex-simple-regex-analyzer wisent-clojure-lex-eval-reader
-  ""
-  "#=" 'EVAL_READER)
-
-(define-lex-simple-regex-analyzer wisent-clojure-lex-comment-reader
-  ""
-  "#!" 'COMMENT_READER)
-
-(define-lex-simple-regex-analyzer wisent-clojure-lex-unreadable-reader
-  ""
-  "#!" 'UNREADABLE_READER)
-
-(define-lex-simple-regex-analyzer wisent-clojure-lex-discard-reader
-  ""
-  "#_" 'DISCARD_READER)
-
 
 (define-lex wisent-clojure-lexer
   "Clojure lexical analyzer."
   semantic-lex-ignore-whitespace
   semantic-lex-ignore-newline
   semantic-lex-ignore-comments
-  ;; wisent-clojure-lex-def
-  wisent-clojure-lex-discard-reader
-  wisent-clojure-lex-unreadable-reader
-  wisent-clojure-lex-comment-reader
-  wisent-clojure-lex-eval-reader
-  wisent-clojure-lex-fn-reader
-  wisent-clojure-lex-set-reader
+
   wisent-clojure-lex-regex-reader
-  wisent-clojure-lex-meta-reader
-  wisent-clojure-lex-var-reader
   wisent-clojure-lex-unquote
   wisent-clojure-lex-quote
   wisent-clojure-lex-syntaxquote
@@ -106,6 +65,7 @@
   wisent-clojure-wy--<string>-sexp-analyzer
   wisent-clojure-wy--<block>-block-analyzer
   wisent-clojure-wy--<keyword>-keyword-analyzer
+  wisent-clojure-wy--<reader>-string-analyzer
   wisent-clojure-lex-symbol
   semantic-lex-default-action
   
@@ -161,7 +121,7 @@
                 ))
         )
     (dolist (exp (append symbols ratios numbers floats strings
-                         lists vectors mixs sets defs))
+                         lists vectors mixs defs sets))
       (message "Test %s " exp) 
       (message "Exp: %s "(wisent-clojure exp)))))
 

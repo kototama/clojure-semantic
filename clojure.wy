@@ -43,10 +43,6 @@
 %keyword DEFN    "defn"
 %keyword DEFN-   "defn-"
 
-%type <macroreader>
-
-%token <macroreader> META_READER "#^"
-
 %type  <block>       ;;syntax "\\s(\\|\\s)" matchdatatype block
 %token <block>       PAREN_BLOCK "(LPAREN RPAREN)"
 %token <block>       BRACE_BLOCK "(LBRACE RBRACE)"
@@ -63,6 +59,17 @@
 
 %type  <string>
 %token <string>      STRING
+
+%type  <reader> syntax "#[^ \t\n]" matchdatatype string
+
+%token <reader> META_READER         "#^"
+%token <reader> VAR_READER          "#'"
+%token <reader> SET_READER          "#{"
+%token <reader> FN_READER           "#("
+%token <reader> EVAL_READER         "#="
+%token <reader> COMMENT_READER      "#!"
+%token <reader> UNREADABLE_READER   "#<"
+%token <reader> DISCARD_READER      "#_"
 
 %%
 
