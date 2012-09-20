@@ -1,0 +1,3 @@
+allow the user configuration of the keywords for method and variable
+definition. This would be usefull if the user defines its own macros
+and need to generate tags for them.
