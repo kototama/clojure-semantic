@@ -29,6 +29,8 @@
 
 %languagemode  clojure-mode
 %start         clojure-expr
+%start         coll-content
+%start         list
         
 %token <number> NUMBER
 %token <symbol> SYMBOL
@@ -75,56 +77,58 @@
 
 clojure-expr: atom
             | list
+              (EXPANDFULL $1 list)
             | map
             | vector
             | set
             ;
 
 list: LPAREN coll-content RPAREN
-      (list 'LIST $2)
+      (EXPANDFULL $2 coll-content)
     | LPAREN RPAREN
-      (list 'LIST)
+      ;; (list 'LIST)
     ;
 
 map: LBRACE coll-content RBRACE
-     (list 'MAP $2)
+     ;; (list 'MAP $2)
    | LBRACE RBRACE
-     (list 'MAP)
+     ;; (list 'MAP)
      ;
 
 vector: LBRACK coll-content RBRACK
-        (list 'VECTOR $2)
+        ;; (list 'VECTOR $2)
       | LBRACK RBRACK
-        (list 'VECTOR)
+        ;; (list 'VECTOR)
     ;
 
 set: SET_READER coll-content RBRACE
-     (list 'SET $2)
+     ;; (list 'SET $2)
    | SET_READER RBRACE
-     (list 'SET)
+     ;; (list 'SET)
      ;
 
 coll-content: clojure-expr
             | DEF SYMBOL clojure-expr
-              (list 'DEF $2)
+              ;; (list 'DEF $2)
+              (VARIABLE-TAG $2 nil 42)
             | DEFN SYMBOL clojure-expr
-              (list 'DEFN $2)
+              ;; (list 'DEFN $2)
             | DEFN- SYMBOL clojure-expr
-              (list 'DEFN- $2)
+              ;; (list 'DEFN- $2)
             | coll-content clojure-expr
-              (append $1 $2)
+              ;; (append $1 $2)
             ;; | ;; empty
             ;;   (list 'EMPTY)
             ;
 
 atom: SYMBOL
-      (list (make-symbol $1))
+      ;; (list (make-symbol $1))
     | RATIO
-      (list (make-symbol $1))
+      ;; (list (make-symbol $1))
     | NUMBER
-      (list (make-symbol $1))
+      ;; (list (make-symbol $1))
     | STRING
-      (list (make-symbol $1))
+      ;; (list (make-symbol $1))
     ;
 
 %%
