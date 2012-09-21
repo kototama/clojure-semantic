@@ -1,13 +1,6 @@
 (require 'semantic/wisent)
 (require 'semantic/wisent/clojure-wy)
 
-;; TODO: problem with whitespaces + symbols
-
-;; (define-lex-simple-regex-analyzer wisent-clojure-lex-def
-;;   "Detect and create def."
-;;   "def"
-;;   'DEF)
-
 (define-lex-simple-regex-analyzer wisent-clojure-lex-symbol
   "Detect and create symbols tokens."
   "[^] \n\t0-9(){}[][^] \t\n(){}[]*"
@@ -23,6 +16,7 @@
   "Detect and create number tokens."
   (concat "[-+]?" semantic-lex-number-expression) 'NUMBER)
 
+;; TODO: move the followings to the grammar?
 (define-lex-simple-regex-analyzer wisent-clojure-lex-quote
   "Detect a quote"
   "'" 'QUOTE)
@@ -121,7 +115,7 @@
                 ))
         )
     (dolist (exp (append symbols ratios numbers floats strings
-                         lists vectors mixs defs sets))
+                         lists vectors mixs sets defs))
       (message "Test %s " exp) 
       (message "Exp: %s "(wisent-clojure exp)))))
 
