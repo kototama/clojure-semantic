@@ -61,9 +61,7 @@
   wisent-clojure-wy--<keyword>-keyword-analyzer
   wisent-clojure-wy--<reader>-string-analyzer
   wisent-clojure-lex-symbol
-  semantic-lex-default-action
-  
-  )
+  semantic-lex-default-action)
 
 (defun wisent-clojure (input)
   "Parse some text"
@@ -113,6 +111,7 @@
                 "(defn x (fn []))"
                 "(defn- y (fn []))"
                 ))
+        (metas '("(def ^:dynamic ^{:private true} print-initialized false)"))
         )
     (dolist (exp (append symbols ratios numbers floats strings
                          lists vectors mixs sets defs))

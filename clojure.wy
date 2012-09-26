@@ -31,13 +31,13 @@
 %start         clojure-expr
 %start         coll-content
 %start         list
+%start         map
+%start         atom
         
 %token <number> NUMBER
 %token <symbol> SYMBOL
 %token <ratio> RATIO
 %token <meta> META
-
-%token <set_reader> SET_READER
 
 %type  <keyword>
 
@@ -76,59 +76,54 @@
 %%
 
 clojure-expr: atom
+              (EXPANDFULL $1 atom)
             | list
               (EXPANDFULL $1 list)
             | map
+              (EXPANDFULL $1 map)
             | vector
             | set
             ;
 
-list: LPAREN coll-content RPAREN
+list: LPAREN RPAREN
+    | LPAREN coll-content RPAREN
       (EXPANDFULL $2 coll-content)
-    | LPAREN RPAREN
-      ;; (list 'LIST)
     ;
 
 map: LBRACE coll-content RBRACE
-     ;; (list 'MAP $2)
    | LBRACE RBRACE
-     ;; (list 'MAP)
      ;
 
 vector: LBRACK coll-content RBRACK
-        ;; (list 'VECTOR $2)
       | LBRACK RBRACK
-        ;; (list 'VECTOR)
     ;
 
 set: SET_READER coll-content RBRACE
-     ;; (list 'SET $2)
    | SET_READER RBRACE
-     ;; (list 'SET)
      ;
 
-coll-content: clojure-expr
-            | DEF SYMBOL clojure-expr
-              ;; (list 'DEF $2)
-              (VARIABLE-TAG $2 nil 42)
-            | DEFN SYMBOL clojure-expr
-              ;; (list 'DEFN $2)
-            | DEFN- SYMBOL clojure-expr
-              ;; (list 'DEFN- $2)
-            | coll-content clojure-expr
-              ;; (append $1 $2)
-            ;; | ;; empty
-            ;;   (list 'EMPTY)
+coll-content: DEF list SYMBOL clojure-expr
+              {
+               (message "HERE!")
+               (VARIABLE-TAG $3 nil nil)
+               }
+            ;; | DEFN SYMBOL clojure-expr
+            ;; | DEFN- SYMBOL clojure-expr
+            ;; | coll-content clojure-expr
+            ;; | clojure-expr
             ;
 
+metadata-list: metadata
+             | metadata-list metadata
+             ;
+
+metadata: map
+        ;
+
 atom: SYMBOL
-      ;; (list (make-symbol $1))
     | RATIO
-      ;; (list (make-symbol $1))
     | NUMBER
-      ;; (list (make-symbol $1))
     | STRING
-      ;; (list (make-symbol $1))
     ;
 
 %%
