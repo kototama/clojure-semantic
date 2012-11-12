@@ -88,7 +88,6 @@
 %token <punctuation> URSHIFT     ">>>"
 %token <punctuation> URSHIFTEQ   ">>>="
 %token <punctuation> QUESTION    "?"
-%token <punctuation> XOR         "^"
 %token <punctuation> XOREQ       "^="
 %token <punctuation> OR          "|"
 %token <punctuation> OREQ        "|="
@@ -106,6 +105,7 @@
 %token <punctuation> COMMENT_READER      "#!"
 %token <punctuation> UNREADABLE_READER   "#<"
 %token <punctuation> DISCARD_READER      "#_"
+%token <punctuation> METADATA            "^"
 
 ;; -----------------
 ;; Literal terminals
@@ -385,14 +385,13 @@ sexpr: PAREN_BLOCK
   ;
 
 list: DEF IDENTIFIER
-      (progn
-        (message "generating id tag")
-        (VARIABLE-TAG $2 nil nil))
-;;;;;    | error
-   ;; On error, skip token and try to continue.
-      ;;(SKIP-TOKEN)
-;;;;;      (message "error!")
+      (VARIABLE-TAG $2 nil nil)
+    | DEF metadata_def IDENTIFIER
+      (VARIABLE-TAG $3 nil nil)
     ;
+
+metadata_def: METADATA BRACE_BLOCK
+            ;
 
 %%
 
