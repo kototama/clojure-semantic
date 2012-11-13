@@ -32,6 +32,7 @@
 ;; The default goal.
 %start sexpr
 %start list
+%start argument
 
 ;; -----------------------------
 ;; Block & Parenthesis terminals
@@ -336,11 +337,21 @@ list: DEF IDENTIFIER
       (VARIABLE-TAG $2 nil nil)
     | DEF metadata_def IDENTIFIER
       (VARIABLE-TAG $3 nil nil)
+    | DEFN IDENTIFIER arguments_def
+      (FUNCTION-TAG $2 nil $3)
     | NS IDENTIFIER
       (PACKAGE-TAG $2 nil)
     ;
 
 metadata_def: METADATA BRACE_BLOCK
+            ;
+
+arguments_def: BRACK_BLOCK
+               (EXPANDFULL $1 argument)
+               ;
+
+argument: IDENTIFIER
+          (VARIABLE-TAG $1 nil nil)
             ;
 
 %%

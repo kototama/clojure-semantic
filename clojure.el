@@ -11,4 +11,5 @@
    ;; semantic-lex-depth nil
    semantic-lex-analyzer 'wisent-clojure2-lexer))
 
+(remove-hook 'clojure-mode-hook 'wisent-clojure-default-setup)
 (add-hook 'clojure-mode-hook 'wisent-clojure-default-setup)
