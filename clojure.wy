@@ -356,6 +356,8 @@ arguments_list: LBRACK arguments_def RBRACK
 
 arguments_def: argument
                (list $1)
+             | argument arguments_def
+               (cons $1 $2)
              ;
 
 argument: IDENTIFIER
