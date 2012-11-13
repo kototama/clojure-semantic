@@ -347,12 +347,17 @@ metadata_def: METADATA BRACE_BLOCK
             ;
 
 arguments_block: BRACK_BLOCK
-               (EXPAND $1 arguments_list)
+                 (EXPAND $1 arguments_list)
                ;
 
-arguments_list: LBRACK arguments_def RBRACK
+arguments_list: LBRACK arguments_def_opt RBRACK
                 (identity $2)
               ;
+
+arguments_def_opt: ;; empty
+                 | arguments_def
+                   (identity $1)
+                 ;
 
 arguments_def: argument
                (list $1)

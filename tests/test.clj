@@ -1,3 +1,6 @@
 (def x 10)
-(defn t [xx yy]
+
+(defn e [])
+
+(defn t [x y z]
   )
