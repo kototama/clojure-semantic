@@ -1,6 +1,6 @@
 (require 'semantic/wisent)
 (require ';; semantic/wisent/
-         clojure-wy2)
+         clojure-wy)
 
 (defun wisent-clojure-default-setup ()
   "Hook run to setup Semantic in `clojure-mode'."
