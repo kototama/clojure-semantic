@@ -32,7 +32,7 @@
 ;; The default goal.
 %start sexpr
 %start list
-%start argument
+%start arguments_list
 
 ;; -----------------------------
 ;; Block & Parenthesis terminals
@@ -347,12 +347,19 @@ metadata_def: METADATA BRACE_BLOCK
             ;
 
 arguments_def: BRACK_BLOCK
-               (EXPANDFULL $1 argument)
+               (progn
+                 (message "expand block")
+                 (EXPAND $1 arguments_list))
                ;
 
-argument: IDENTIFIER
-          (VARIABLE-TAG $1 nil nil)
+arguments_list: LBRACK argument RBRACK
+                (list $2)
             ;
+
+argument: IDENTIFIER
+          (EXPANDTAG
+           (VARIABLE-TAG $1 nil nil))
+        ;
 
 %%
 
