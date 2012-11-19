@@ -11,7 +11,7 @@
   clojure.core)
 
 (def unquote)
-(def unquote-splicing)
+(def ^{:a o} unquote-splicing)
 
 ;; (def
 ;;  ^{:arglists '([& items])

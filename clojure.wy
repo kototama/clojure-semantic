@@ -102,9 +102,7 @@ sexpr: PAREN_BLOCK
        (EXPANDFULL $1 list) ;; TODO replace by EXPAND and adds LPAREN RPAREN ?
   ;
 
-list: DEF IDENTIFIER
-      (VARIABLE-TAG $2 nil nil)
-    | DEF metadata_def IDENTIFIER
+list: DEF metadata_def_opt IDENTIFIER
       (VARIABLE-TAG $3 nil nil)
     | DEFN IDENTIFIER arguments_block
       (FUNCTION-TAG $2 nil $3)
