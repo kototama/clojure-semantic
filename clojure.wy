@@ -55,49 +55,6 @@
 ;; ------------------
 %type  <punctuation> ;;syntax "\\(\\s.\\|\\s$\\|\\s'\\)+" matchdatatype string
 
-%token <punctuation> NOT         "!"
-%token <punctuation> NOTEQ       "!="
-%token <punctuation> MOD         "%"
-%token <punctuation> MODEQ       "%="
-%token <punctuation> AND         "&"
-%token <punctuation> ANDAND      "&&"
-%token <punctuation> ANDEQ       "&="
-%token <punctuation> MULT        "*"
-%token <punctuation> MULTEQ      "*="
-%token <punctuation> PLUS        "+"
-%token <punctuation> PLUSPLUS    "++"
-%token <punctuation> PLUSEQ      "+="
-%token <punctuation> COMMA       ","
-%token <punctuation> MINUS       "-"
-%token <punctuation> MINUSMINUS  "--"
-%token <punctuation> MINUSEQ     "-="
-%token <punctuation> DOT         "."
-%token <punctuation> DIV         "/"
-%token <punctuation> DIVEQ       "/="
-%token <punctuation> COLON       ":"
-%token <punctuation> SEMICOLON   ";"
-%token <punctuation> LT          "<"
-%token <punctuation> LSHIFT      "<<"
-%token <punctuation> LSHIFTEQ    "<<="
-%token <punctuation> LTEQ        "<="
-%token <punctuation> EQ          "="
-%token <punctuation> EQEQ        "=="
-%token <punctuation> GT          ">"
-%token <punctuation> GTEQ        ">="
-%token <punctuation> RSHIFT      ">>"
-%token <punctuation> RSHIFTEQ    ">>="
-%token <punctuation> URSHIFT     ">>>"
-%token <punctuation> URSHIFTEQ   ">>>="
-%token <punctuation> QUESTION    "?"
-%token <punctuation> XOREQ       "^="
-%token <punctuation> OR          "|"
-%token <punctuation> OREQ        "|="
-%token <punctuation> OROR        "||"
-%token <punctuation> COMP        "~"
-%token <punctuation> ELLIPSIS    "..."
-%token <punctuation> AT          "@"
-
-;; my additions:
 %token <punctuation> META_READER         "#^"
 %token <punctuation> VAR_READER          "#'"
 %token <punctuation> SET_READER          "#{"
@@ -112,12 +69,9 @@
 ;; Literal terminals
 ;; -----------------
 %type  <symbol>      ;;syntax "\\(\\sw\\|\\s_\\)+"
-%token <symbol>      NULL_LITERAL    "\\`null\\'"
-%token <symbol>      BOOLEAN_LITERAL "\\`false\\'"
-%token <symbol>      BOOLEAN_LITERAL "\\`true\\'"
+
 %token <symbol>      IDENTIFIER
 
-;; my additions:
 %token <symbol>      DEF "\\`def\\'"
 %token <symbol>      DEFN "\\`defn\\'"
 %token <symbol>      DEFN_MINUS "\\`defn-\\'"
@@ -135,197 +89,10 @@
 ;; Generate a keyword analyzer
 %type  <keyword> ;;syntax "\\(\\sw\\|\\s_\\)+" matchdatatype keyword
 
-%keyword ABSTRACT     "abstract"
-%put     ABSTRACT summary
-"Class|Method declaration modifier: abstract {class|<type>} <name> ..."
-
-%keyword ASSERT       "assert"
-%put     ASSERT summary
-"Assertion statement: assert <expr> [,<expr> ...];"
-
-%keyword BOOLEAN      "boolean"
-%put     BOOLEAN summary
-"Primitive logical quantity type (true or false)"
-
-%keyword BREAK        "break"
-%put     BREAK summary
-"break [<label>] ;"
-
-%keyword BYTE         "byte"
-%put     BYTE summary
-"Integral primitive type (-128 to 127)"
-
-%keyword CASE         "case"
-%put     CASE summary
-"switch(<expr>) {case <const-expr>: <stmts> ... }"
-
-%keyword CATCH        "catch"
-%put     CATCH summary
-"try {<stmts>} catch(<parm>) {<stmts>} ... "
-
-%keyword CHAR         "char"
-%put     CHAR summary
-"Integral primitive type ('\u0000' to '\uffff') (0 to 65535)"
-
-%keyword CLASS        "class"
-%put     CLASS summary
-"Class declaration: class <name>"
-
-%keyword CONST        "const"
-%put     CONST summary
-"Unused reserved word"
-
-%keyword CONTINUE     "continue"
-%put     CONTINUE summary
-"continue [<label>] ;"
-
-%keyword DEFAULT      "default"
-%put     DEFAULT summary
-"switch(<expr>) { ... default: <stmts>}"
-
-%keyword DO           "do"
-%put     DO summary
-"do <stmt> while (<expr>);"
-
-%keyword DOUBLE       "double"
-%put     DOUBLE summary
-"Primitive floating-point type (double-precision 64-bit IEEE 754)"
-
-%keyword ELSE         "else"
-%put     ELSE summary
-"if (<expr>) <stmt> else <stmt>"
-
-%keyword ENUM         "enum"
-%put     ENUM summary
-"Enum declaration"
-
-%keyword EXTENDS      "extends"
-%put     EXTENDS summary
-"SuperClass|SuperInterfaces declaration: extends <name> [, ...]"
-
-%keyword FINAL        "final"
-%put     FINAL summary
-"Class|Member declaration modifier: final {class|<type>} <name> ..."
-
-%keyword FINALLY      "finally"
-%put     FINALLY summary
-"try {<stmts>} ... finally {<stmts>}"
-
-%keyword FLOAT        "float"
-%put     FLOAT summary
-"Primitive floating-point type (single-precision 32-bit IEEE 754)"
-
-%keyword FOR          "for"
-%put     FOR summary
-"for ([<init-expr>]; [<expr>]; [<update-expr>]) <stmt>"
-
-%keyword GOTO         "goto"
-%put     GOTO summary
-"Unused reserved word"
-
-%keyword IF           "if"
-%put     IF summary
-"if (<expr>) <stmt> [else <stmt>]"
-
-%keyword IMPLEMENTS   "implements"
-%put     IMPLEMENTS summary
-"Class SuperInterfaces declaration: implements <name> [, ...]"
-
-%keyword IMPORT       "import"
-%put     IMPORT summary
-"Import package declarations: import <package>"
-
-%keyword INSTANCEOF   "instanceof"
-
-%keyword INT          "int"
-%put     INT summary
-"Integral primitive type (-2147483648 to 2147483647)"
-
-%keyword INTERFACE    "interface"
-%put     INTERFACE summary
-"Interface declaration: interface <name>"
-
-%keyword LONG         "long"
-%put     LONG summary
-"Integral primitive type (-9223372036854775808 to 9223372036854775807)"
-
-%keyword NATIVE       "native"
-%put     NATIVE summary
-"Method declaration modifier: native <type> <name> ..."
-
-%keyword NEW          "new"
-
-%keyword PACKAGE      "package"
-%put     PACKAGE summary
-"Package declaration: package <name>"
-
-%keyword PRIVATE      "private"
-%put     PRIVATE summary
-"Access level modifier: private {class|interface|<type>} <name> ..."
-
-%keyword PROTECTED    "protected"
-%put     PROTECTED summary
-"Access level modifier: protected {class|interface|<type>} <name> ..."
-
-%keyword PUBLIC       "public"
-%put     PUBLIC summary
-"Access level modifier: public {class|interface|<type>} <name> ..."
-
-%keyword RETURN       "return"
-%put     RETURN summary
-"return [<expr>] ;"
-
-%keyword SHORT        "short"
-%put     SHORT summary
-"Integral primitive type (-32768 to 32767)"
-
-%keyword STATIC       "static"
-%put     STATIC summary
-"Declaration modifier: static {class|interface|<type>} <name> ..."
-
-%keyword STRICTFP     "strictfp"
-%put     STRICTFP summary
-"Declaration modifier: strictfp {class|interface|<type>} <name> ..."
-
-%keyword SUPER        "super"
-
-%keyword SWITCH       "switch"
-%put     SWITCH summary
-"switch(<expr>) {[case <const-expr>: <stmts> ...] [default: <stmts>]}"
-
-%keyword SYNCHRONIZED "synchronized"
-%put     SYNCHRONIZED summary
-"synchronized (<expr>) ... | Method decl. modifier: synchronized <type> <name> ..."
-
-%keyword THIS         "this"
 
 %keyword THROW        "throw"
 %put     THROW summary
-"throw <expr> ;"
-
-%keyword THROWS       "throws"
-%put     THROWS summary
-"Method|Constructor declaration: throws <classType>, ..."
-
-%keyword TRANSIENT    "transient"
-%put     TRANSIENT summary
-"Field declaration modifier: transient <type> <name> ..."
-
-%keyword TRY          "try"
-%put     TRY summary
-"try {<stmts>} [catch(<parm>) {<stmts>} ...] [finally {<stmts>}]"
-
-%keyword VOID         "void"
-%put     VOID summary
-"Method return type: void <name> ..."
-
-%keyword VOLATILE     "volatile"
-%put     VOLATILE summary
-"Field declaration modifier: volatile <type> <name> ..."
-
-%keyword WHILE        "while"
-%put     WHILE summary
-"while (<expr>) <stmt> | do <stmt> while (<expr>);"
+"throw"
   
 %%
 
@@ -339,9 +106,13 @@ list: DEF IDENTIFIER
       (VARIABLE-TAG $3 nil nil)
     | DEFN IDENTIFIER arguments_block
       (FUNCTION-TAG $2 nil $3)
-    | NS IDENTIFIER
-      (PACKAGE-TAG $2 nil)
+    | NS metadata_def_opt IDENTIFIER
+      (PACKAGE-TAG $3 nil)
     ;
+
+metadata_def_opt: ;; empty
+                | metadata_def
+                ;
 
 metadata_def: METADATA BRACE_BLOCK
             ;

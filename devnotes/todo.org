@@ -5,3 +5,7 @@ and need to generate tags for them.
 (semantic-get-all-local-variables) ?
 
 semantic-fetch-tags
+
+add Lang:
+
+http://cedet.sourceforge.net/addlang.shtml
