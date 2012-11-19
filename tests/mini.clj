@@ -13,17 +13,26 @@
 (def unquote)
 (def unquote-splicing)
 
-(def
- ^{:arglists '([& items])
-   :doc "Creates a new list containing the items."
-   :added "1.0"}
-  list (. clojure.lang.PersistentList creator))
+;; (def
+;;  ^{:arglists '([& items])
+;;    :doc "Creates a new list containing the items."
+;;    :added "1.0"}
+;;   list (. clojure.lang.PersistentList creator))
 
-(def
- ^{:arglists '([x seq])
-    :doc "Returns a new seq where x is the first element and seq is
-    the rest."
-   :added "1.0"
-   :static true}
+;; (def
+;;  ^{:arglists '([x seq])
+;;     :doc "Returns a new seq where x is the first element and seq is
+;;     the rest."
+;;    :added "1.0"
+;;    :static true}
 
- cons (fn* ^:static cons [x seq] (. clojure.lang.RT (cons x seq))))
+;;  cons (fn* ^:static cons [x seq] (. clojure.lang.RT (cons x seq))))
+
+
+(defn a [])
+
+(deftest b [])
+
+(defmacro x [])
+
+(defn- p [])
