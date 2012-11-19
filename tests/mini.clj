@@ -36,3 +36,5 @@
 (defmacro x [])
 
 (defn- p [])
+
+(defstruct stuff-it [])
