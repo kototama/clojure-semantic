@@ -1,7 +1,7 @@
 clojure-semantic
 ================
 
-Experiments with Emacs semantic.el and Clojure.
+Experiments with Emacs semantic.el, CEDET and Clojure.
 
 If you want to give it a try:
 
