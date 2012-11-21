@@ -9,3 +9,22 @@ semantic-fetch-tags
 add Lang:
 
 http://cedet.sourceforge.net/addlang.shtml
+
+Replace include-tag by package-tag for the NS
+
+* context parsing
+  The Semantic analyzer is a complex engine which has been broken down across several modules. When the Semantic analyzer fails, start with semantic-analyze-debug-assist, then dive into some of these files.
+  
+  semantic-ctxt.el
+Local context parser. Contains overloadable functions used to move around through different scopes, get
+local variables, and collect the current prefix used when doing completion
+
+semantic-scope.el
+Calculate scope for a location in a buffer. The scope includes local variables, and tag lists in scope for various reasons, such as C++ using statements. 
+
+semantic-ia.el
+Interactive Analyzer functions. Simple routines that do completion or lookups based on the results from the Analyzer. These routines are meant as examples for application writers, but are quite useful as they are. 
+
+* smart completion
+
+* defrecord and deftype definitions has CLASSES tags

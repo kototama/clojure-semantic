@@ -10,8 +10,8 @@
        :author "Rich Hickey"}
   clojure.core)
 
-(def unquote)
-(def ^{:a o} unquote-splicing)
+(def unquote2)
+(def ^{:a o} unquote-splicing2)
 
 ;; (def
 ;;  ^{:arglists '([& items])
@@ -27,14 +27,22 @@
 ;;    :static true}
 
 ;;  cons (fn* ^:static cons [x seq] (. clojure.lang.RT (cons x seq))))
-
+(defs abc)
 
 (defn a [])
 
 (deftest b [])
 
-(defmacro x [])
+(defmachin machin [])
 
-(defn- p [])
+(defn- pierre-function [])
+
+(defn- pierre-function2 [])
 
 (defstruct stuff-it [])
+
+(defn pierre)
+
+(defnm xyz [o])
+
+(defalias alias 10)

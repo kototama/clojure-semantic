@@ -3,7 +3,7 @@
 ;; Copyright (C) 
 
 ;; Author: Pierre Allix <pal@elan-pallix>
-;; Created: 2012-11-19 16:25:23+0100
+;; Created: 2012-11-21 11:46:09+0100
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -47,15 +47,15 @@
 
 (defconst wisent-clojure-wy--token-table
   (semantic-lex-make-type-table
-   '(("number"
+   '(("<no-type>"
+      (DEF)
+      (DEFN))
+     ("number"
       (NUMBER_LITERAL))
      ("string"
       (STRING_LITERAL))
      ("symbol"
       (NS . "\\`ns\\'")
-      (DEFN_MINUS . "\\`defn-\\'")
-      (DEFN . "\\`defn\\'")
-      (DEF . "\\`def\\'")
       (IDENTIFIER))
      ("punctuation"
       (METADATA . "^")
@@ -92,7 +92,7 @@
     (eval-when-compile
       (require 'semantic/wisent/comp))
     (wisent-compile-grammar
-     '((PAREN_BLOCK BRACE_BLOCK BRACK_BLOCK LPAREN RPAREN LBRACE RBRACE LBRACK RBRACK META_READER VAR_READER SET_READER FN_READER EVAL_READER COMMENT_READER UNREADABLE_READER DISCARD_READER METADATA IDENTIFIER DEF DEFN DEFN_MINUS NS STRING_LITERAL NUMBER_LITERAL THROW)
+     '((PAREN_BLOCK BRACE_BLOCK BRACK_BLOCK LPAREN RPAREN LBRACE RBRACE LBRACK RBRACK META_READER VAR_READER SET_READER FN_READER EVAL_READER COMMENT_READER UNREADABLE_READER DISCARD_READER METADATA IDENTIFIER NS STRING_LITERAL NUMBER_LITERAL THROW DEFN DEF)
        nil
        (sexpr
         ((PAREN_BLOCK)
@@ -101,10 +101,7 @@
           (cdr $region1)
           'list 1)))
        (list
-        ((DEF IDENTIFIER)
-         (wisent-raw-tag
-          (semantic-tag-new-variable $2 nil nil)))
-        ((DEF metadata_def IDENTIFIER)
+        ((DEF metadata_def_opt IDENTIFIER)
          (wisent-raw-tag
           (semantic-tag-new-variable $3 nil nil)))
         ((DEFN IDENTIFIER arguments_block)
@@ -177,10 +174,7 @@
 (define-lex-regex-type-analyzer wisent-clojure-wy--<symbol>-regexp-analyzer
   "regexp analyzer for <symbol> tokens."
   "\\(\\sw\\|\\s_\\)+"
-  '((NS . "\\`ns\\'")
-    (DEFN_MINUS . "\\`defn-\\'")
-    (DEFN . "\\`defn\\'")
-    (DEF . "\\`def\\'"))
+  '((NS . "\\`ns\\'"))
   'IDENTIFIER)
 
 (define-lex-regex-type-analyzer wisent-clojure-wy--<number>-regexp-analyzer
@@ -215,23 +209,10 @@
 
 ;;; Epilogue
 ;;
-;; Define the lexer for this grammar
-(define-lex wisent-clojure2-lexer
-  "Lexical analyzer that handles Clojure buffers.
-It ignores whitespaces, newlines and comments."
-  semantic-lex-ignore-whitespace
-  semantic-lex-ignore-newline
-  semantic-lex-ignore-comments
-  ;;;; Auto-generated analyzers.
-  wisent-clojure-wy--<number>-regexp-analyzer
-  wisent-clojure-wy--<string>-sexp-analyzer
-  ;; Must detect keywords before other symbols
-  wisent-clojure-wy--<keyword>-keyword-analyzer
-  wisent-clojure-wy--<symbol>-regexp-analyzer
-  wisent-clojure-wy--<punctuation>-string-analyzer
-  wisent-clojure-wy--<block>-block-analyzer
-  ;;;;
-  semantic-lex-default-action)
+
+
+
+
 
 (provide 'clojure-wy)
 
