@@ -27,7 +27,6 @@
 ;;    :static true}
 
 ;;  cons (fn* ^:static cons [x seq] (. clojure.lang.RT (cons x seq))))
-(defs abc)
 
 (defn a [])
 
@@ -43,6 +42,8 @@
 
 (defn pierre)
 
-(defnm xyz [o])
+(defn xyz [o])
 
 (defalias alias 10)
+
+pierre-function(

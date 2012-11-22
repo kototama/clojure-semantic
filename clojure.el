@@ -66,3 +66,14 @@ It ignores whitespaces, newlines and comments."
 
 (remove-hook 'clojure-mode-hook 'wisent-clojure-default-setup)
 (add-hook 'clojure-mode-hook 'wisent-clojure-default-setup)
+
+;; various override
+(define-mode-local-override semantic-sb-tag-children-to-expand
+  clojure-mode (tag)
+  "Doc goes here"
+  (message "[clojure] tag : %s" tag))
+
+(define-mode-local-override semantic-ia-insert-tag-default
+  clojure-mode (tag)
+  "Overrides the semantic function"
+  )
