@@ -3,7 +3,7 @@
 ;; Copyright (C) 
 
 ;; Author: Pierre Allix <pal@elan-pallix>
-;; Created: 2012-11-21 13:47:10+0100
+;; Created: 2012-11-26 14:39:21+0100
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 

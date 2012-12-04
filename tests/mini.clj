@@ -46,4 +46,4 @@
 
 (defalias alias 10)
 
-pierre-function(
+(defn opopo [])
