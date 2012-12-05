@@ -8,42 +8,26 @@
 
 (ns ^{:doc "The core Clojure language."
        :author "Rich Hickey"}
-  clojure.core)
+  klojure.core)
 
-(def unquote2)
+(def unquote2 12)
 (def ^{:a o} unquote-splicing2)
 
-;; (def
-;;  ^{:arglists '([& items])
-;;    :doc "Creates a new list containing the items."
-;;    :added "1.0"}
-;;   list (. clojure.lang.PersistentList creator))
+(defn ^:s ^:b aa [b c])
 
-;; (def
-;;  ^{:arglists '([x seq])
-;;     :doc "Returns a new seq where x is the first element and seq is
-;;     the rest."
-;;    :added "1.0"
-;;    :static true}
-
-;;  cons (fn* ^:static cons [x seq] (. clojure.lang.RT (cons x seq))))
-
-(defn a [])
-
-(deftest b [])
-
-(defmachin machin [])
-
-(defn- pierre-function [])
-
-(defn- pierre-function2 [])
-
-(defstruct stuff-it [])
-
-(defn pierre)
-
-(defn xyz [o])
-
-(defalias alias 10)
-
-(defn opopo [])
+(defn ^:private ^:static
+  reduce1
+       ([f coll]
+             (let [s (seq coll)]
+               (if s
+         (reduce1 f (first s) (next s))
+                 (f))))
+       ([f val coll]
+          (let [s (seq coll)]
+            (if s
+              (if (chunked-seq? s)
+                (recur f 
+                       (.reduce (chunk-first s) f val)
+                       (chunk-next s))
+                (recur f (f val (first s)) (next s)))
+         val))))

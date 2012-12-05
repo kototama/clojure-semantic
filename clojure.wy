@@ -102,19 +102,33 @@ sexpr: PAREN_BLOCK
        (EXPANDFULL $1 list) ;; TODO replace by EXPAND and adds LPAREN RPAREN ?
   ;
 
-list: DEF metadata_def_opt IDENTIFIER
+lists: list
+     | lists list
+     ;
+
+list: DEF metadata_defs_opt IDENTIFIER
       (VARIABLE-TAG $3 nil nil)
-    | DEFN IDENTIFIER arguments_block
-      (FUNCTION-TAG $2 nil $3)
-    | NS metadata_def_opt IDENTIFIER
+    | DEFN metadata_defs_opt IDENTIFIER doc_string_opt
+      (FUNCTION-TAG $3 nil nil)
+    | NS metadata_defs_opt IDENTIFIER
       (PACKAGE-TAG $3 nil)
+    | sexpr
     ;
 
-metadata_def_opt: ;; empty
-                | metadata_def
+doc_string_opt: ;; empty
+                STRING_LITERAL
+              ;
+
+metadata_defs_opt: ;; empty
+                | metadata_defs
                 ;
 
+metadata_defs: metadata_def
+             | metadata_defs metadata_def
+             ;
+
 metadata_def: METADATA BRACE_BLOCK
+            | METADATA IDENTIFIER
             ;
 
 arguments_block: BRACK_BLOCK
