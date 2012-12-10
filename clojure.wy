@@ -135,7 +135,7 @@ metadata_def: METADATA BRACE_BLOCK
             | METADATA IDENTIFIER
             ;
 
-fn_content_def: arguments_block sexpr
+fn_content_def: metadata_defs_opt arguments_block sexpr
              ;; simple arity
               | list_content
              ;; multiple arity

@@ -62,3 +62,10 @@
  ^{:doc "bound in a repl thread to the second most recent value printed"
    :added "1.0"}
  *2)
+
+
+(defn ^:static ^clojure.lang.ChunkBuffer kchunk-buffer ^clojure.lang.ChunkBuffer [capacity]
+  (clojure.lang.ChunkBuffer. capacity))
+
+(defn ^:static kchunk-append [^clojure.lang.ChunkBuffer b x]
+  (.add b x))
