@@ -31,8 +31,8 @@
 
 ;; The default goal.
 %start sexpr
-%start list
-%start arguments_list
+%start list_content_opt
+%start argument
 
 ;; -----------------------------
 ;; Block & Parenthesis terminals
@@ -99,29 +99,33 @@
 %%
 
 sexpr: PAREN_BLOCK
-       (EXPANDFULL $1 list) ;; TODO replace by EXPAND and adds LPAREN RPAREN ?
+       (EXPANDFULL $1 list_content_opt) ;; TODO replace by EXPAND and adds LPAREN RPAREN ?
+     | IDENTIFIER
+     | NUMBER_LITERAL
+     | STRING_LITERAL
   ;
 
-lists: list
-     | lists list
-     ;
+list_content_opt: ;; empty
+                | list_content
+                ;
 
-list: DEF metadata_defs_opt IDENTIFIER
-      (VARIABLE-TAG $3 nil nil)
-    | DEFN metadata_defs_opt IDENTIFIER doc_string_opt
-      (FUNCTION-TAG $3 nil nil)
-    | NS metadata_defs_opt IDENTIFIER
-      (PACKAGE-TAG $3 nil)
-    | sexpr
+list_content: DEF metadata_defs_opt IDENTIFIER list_content_opt
+              (VARIABLE-TAG $3 nil nil)
+            | DEFN metadata_defs_opt IDENTIFIER doc_string_opt fn_content_def
+              (FUNCTION-TAG $3 nil nil)
+            | NS metadata_defs_opt IDENTIFIER
+              (PACKAGE-TAG $3 nil)
+            | sexpr
+            | sexpr list_content 
     ;
 
 doc_string_opt: ;; empty
-                STRING_LITERAL
+              | STRING_LITERAL
               ;
 
 metadata_defs_opt: ;; empty
-                | metadata_defs
-                ;
+                 | metadata_defs
+                 ;
 
 metadata_defs: metadata_def
              | metadata_defs metadata_def
@@ -131,24 +135,15 @@ metadata_def: METADATA BRACE_BLOCK
             | METADATA IDENTIFIER
             ;
 
-arguments_block: BRACK_BLOCK
-                 (EXPAND $1 arguments_list)
-               ;
-
-arguments_list: LBRACK arguments_def_opt RBRACK
-                (identity $2)
-              ;
-
-arguments_def_opt: ;; empty
-                 | arguments_def
-                   (identity $1)
-                 ;
-
-arguments_def: argument
-               (list $1)
-             | argument arguments_def
-               (cons $1 $2)
+fn_content_def: arguments_block sexpr
+             ;; simple arity
+              | list_content
+             ;; multiple arity
              ;
+
+arguments_block: BRACK_BLOCK
+                 (EXPANDFULL $1 argument)
+               ;
 
 argument: IDENTIFIER
           (EXPANDTAG

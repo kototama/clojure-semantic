@@ -8,15 +8,15 @@
 
 (ns ^{:doc "The core Clojure language."
        :author "Rich Hickey"}
-  klojure.core)
+  kklojure.core)
 
 (def unquote2 12)
 (def ^{:a o} unquote-splicing2)
 
-(defn ^:s ^:b aa [b c])
+(defn aa [b c] ())
 
 (defn ^:private ^:static
-  reduce1
+  kreduce
        ([f coll]
              (let [s (seq coll)]
                (if s
@@ -31,3 +31,34 @@
                        (chunk-next s))
                 (recur f (f val (first s)) (next s)))
          val))))
+
+(defn ^:string kcheck4
+  "Detects and rejects non-trivial cyclic load dependencies. The
+  exception message shows the dependency chain with the cycle
+  highlighted. Ignores the trivial case of a file attempting to load
+  itself because that can occur when a gen-class'd class loads its
+  implementation."
+  [path]
+  (when (some #{path} (rest *pending-paths*))
+    (let [pending (map #(if (= % path) (str "[ " % " ]") %)
+                       (cons path *pending-paths*))
+          chain (apply str (interpose "->" pending))]
+      (throw (Exception. (str "Cyclic load dependency: " chain))))))
+
+(defn- ^:string check2
+  "Detects and rejects non-trivial cyclic load dependencies. The
+  exception message shows the dependency chain with the cycle
+  highlighted. Ignores the trivial case of a file attempting to load
+  itself because that can occur when a gen-class'd class loads its
+  implementation."
+  [path]
+  (when (some #{path} (rest *pending-paths*))
+    (let [pending (map #(if (= % path) (str "[ " % " ]") %)
+                       (cons path *pending-paths*))
+          chain (apply str (interpose "->" pending))]
+      (throw (Exception. (str "Cyclic load dependency: " chain))))))
+
+(def ^:dynamic
+ ^{:doc "bound in a repl thread to the second most recent value printed"
+   :added "1.0"}
+ *2)

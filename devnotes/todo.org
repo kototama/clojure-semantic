@@ -11,9 +11,14 @@ add Lang:
 http://cedet.sourceforge.net/addlang.shtml
 
 * TODO
+
+(defn ^:static ^clojure.lang.ChunkBuffer chunk-buffer ^clojure.lang.ChunkBuffer [capacity]
+  (clojure.lang.ChunkBuffer. capacity))
+
+(defn ^:static chunk-append [^clojure.lang.ChunkBuffer b x]
+  (.add b x))
+
   ** parsing of defproject
-  ** function with multiple arity
-  ** rename <punctuation> to <reader>
   ** parse functions with types hints
   ** parse functions with variadict arguments
   ** not working:
