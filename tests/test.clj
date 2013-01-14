@@ -1,3 +1,3 @@
-(defn t [x y z]
+(defn t [^String x y z]
   
   )
