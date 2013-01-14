@@ -111,8 +111,8 @@ list_content_opt: ;; empty
 
 list_content: DEF metadata_defs_opt IDENTIFIER list_content_opt
               (VARIABLE-TAG $3 nil nil)
-            | DEFN metadata_defs_opt IDENTIFIER doc_string_opt fn_content_def
-              (FUNCTION-TAG $3 nil nil)
+            | DEFN metadata_defs_opt IDENTIFIER doc_string_opt metadata_defs_opt fn_content_def
+              (FUNCTION-TAG $3 nil $6)
             | NS metadata_defs_opt IDENTIFIER
               (PACKAGE-TAG $3 nil)
             | sexpr
@@ -135,19 +135,15 @@ metadata_def: METADATA BRACE_BLOCK
             | METADATA IDENTIFIER
             ;
 
-fn_content_def: metadata_defs_opt arguments_block sexpr
+fn_content_def: BRACK_BLOCK
              ;; simple arity
-              | list_content
+                (EXPANDFULL $1 argument)
+              | PAREN_BLOCK
              ;; multiple arity
              ;
 
-arguments_block: BRACK_BLOCK
-                 (EXPANDFULL $1 argument)
-               ;
-
 argument: IDENTIFIER
-          (EXPANDTAG
-           (VARIABLE-TAG $1 nil nil))
+          (VARIABLE-TAG $1 nil nil)
         ;
 
 %%
