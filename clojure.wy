@@ -113,7 +113,7 @@ list_content_opt: ;; empty
 list_content: DEF metadata_defs_opt IDENTIFIER list_content_opt
               (VARIABLE-TAG $3 nil nil)
             | DEFN metadata_defs_opt IDENTIFIER doc_string_opt metadata_defs_opt fn_content_def
-              (FUNCTION-TAG $3 nil $6)
+              (FUNCTION-TAG $3 nil (car $6) :arity (cadr $6))
             | NS metadata_defs_opt IDENTIFIER
               (PACKAGE-TAG $3 nil)
             | sexpr
@@ -142,11 +142,17 @@ fn_content_simple_arity: BRACK_BLOCK
                        ;
 
 fn_content_multi_arity: PAREN_BLOCK
-                        (EXPANDFULL $1 fn_content_simple_arity)
+                        (list (reverse (EXPANDFULL $1 fn_content_simple_arity)))
+                      | PAREN_BLOCK fn_content_multi_arity
+                        (append
+                         (list (reverse (EXPANDFULL $1 fn_content_simple_arity))
+                               (list $2)))
                       ;
 
 fn_content_def: fn_content_simple_arity
+                (list $1 nil)
               | fn_content_multi_arity
+                (list (car $1) $1)
               ;
 
 argument: IDENTIFIER
