@@ -33,6 +33,7 @@
 %start sexpr
 %start list_content_opt
 %start argument
+%start fn_content_simple_arity
 
 ;; -----------------------------
 ;; Block & Parenthesis terminals
@@ -136,12 +137,17 @@ metadata_def: METADATA BRACE_BLOCK
               (list $2)
             ;
 
-fn_content_def: BRACK_BLOCK
-             ;; simple arity
-                (EXPANDFULL $1 argument)
-              | PAREN_BLOCK
-             ;; multiple arity
-             ;
+fn_content_simple_arity: BRACK_BLOCK
+                         (EXPANDFULL $1 argument)
+                       ;
+
+fn_content_multi_arity: PAREN_BLOCK
+                        (EXPANDFULL $1 fn_content_simple_arity)
+                      ;
+
+fn_content_def: fn_content_simple_arity
+              | fn_content_multi_arity
+              ;
 
 argument: IDENTIFIER
           (VARIABLE-TAG $1 nil nil)
