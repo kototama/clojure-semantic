@@ -11,10 +11,9 @@ add Lang:
 http://cedet.sourceforge.net/addlang.shtml
 
 * TODO
-  ** parsing of defproject
-  ** collect arguments for functions
-
-arguments can have metadata!
+** try removing the string in the first rule
+** replacing expandfull by expand in the first rule
+** parsing of defproject
 
 (defn alter-meta!
   "Atomically sets the metadata for a namespace/var/ref/agent/atom to be:
