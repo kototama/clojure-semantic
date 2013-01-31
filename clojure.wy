@@ -142,6 +142,7 @@ fn_content_simple_arity: BRACK_BLOCK
                        ;
 
 fn_content_multi_arity: PAREN_BLOCK
+                     ;; for some reasons we get the arguments in the wrong order here
                         (list (reverse (EXPANDFULL $1 fn_content_simple_arity)))
                       | PAREN_BLOCK fn_content_multi_arity
                         (append
