@@ -1,0 +1,7 @@
+M-x semantic-lex-debug
+M-x wisent-debug-on-entry
+
+(setq wisent-debug-flag t)
+
+Parsing a region with a rule ?
+(semantic-parse-region (car $region1) (cdr $region1) (quote fn_content_simple_arity) 1)
