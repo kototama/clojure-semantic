@@ -27,6 +27,10 @@ http://cedet.sourceforge.net/addlang.shtml
 
   ** collect import for ns
   
+** speedbar not working on:
+(defn ^:static ^clojure.lang.ChunkBuffer kchunk-buffer ^clojure.lang.ChunkBuffer [capacity]
+  (clojure.lang.ChunkBuffer. capacity))
+
 * context parsing
   The Semantic analyzer is a complex engine which has been broken down across several modules. When the Semantic analyzer fails, start with semantic-analyze-debug-assist, then dive into some of these files.
   
