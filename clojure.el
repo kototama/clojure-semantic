@@ -2,25 +2,27 @@
 (require ';; semantic/wisent/
          clojure-wy)
 
-(defvar wisent-clojure-user-def-macros nil
-  "A list of names for the user's own Clojure macros that defines variables.")
+(defcustom wisent-clojure-user-def-macros nil
+  "A list of names for the user's own Clojure macros that defines variables."
+  :type '(repeat string)
+  :group 'wisent-clojure)
 
-;; TODO: move that to a var
-(setq wisent-clojure-def-regexp (regexp-opt (append
-                                                '("def" "def-" "defonce" "defonce-"
-                                                  "defstruct-" "defunbound"
-                                                  "defunbound-"
-                                                  "defvar" "defvar-"
-                                                  "defrecord"
-                                                  "defstruct" "deftype" "defprotocol"
-                                                  "defalias" "defhinted")
-                                                wisent-clojure-user-def-macros)))
+(defvar wisent-clojure-def-regexp (regexp-opt (append
+                                               '("def" "def-" "defonce" "defonce-"
+                                                 "defstruct-" "defunbound"
+                                                 "defunbound-"
+                                                 "defvar" "defvar-"
+                                                 "defrecord"
+                                                 "defstruct" "deftype" "defprotocol"
+                                                 "defalias" "defhinted")
+                                               wisent-clojure-user-def-macros)))
 
-(defvar wisent-clojure-user-defn-macros nil
-  "A list of names for the user's own Clojure macros that defines functions.")
+(defcustom wisent-clojure-user-defn-macros nil
+  "A list of names for the user's own Clojure macros that defines functions."
+  :type '(repeat string)
+  :group 'wisent-clojure)
 
-;; TODO: move that to a var
-(setq wisent-clojure-defn-regexp (regexp-opt (append
+(defvar wisent-clojure-defn-regexp (regexp-opt (append
                                                 '("defn" "defn-" 
                                                   "defmulti" "defmethod" "defmacro"
                                                   "deftest"
