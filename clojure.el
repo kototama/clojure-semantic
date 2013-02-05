@@ -31,11 +31,11 @@
                                                 wisent-clojure-user-defn-macros)))
 
 (define-lex-simple-regex-analyzer wisent-clojure-lex-deffunc
-  "Detect and create functions and macros."
+  "Detect functions and macros."
   wisent-clojure-defn-regexp 'DEFN)
 
 (define-lex-simple-regex-analyzer wisent-clojure-lex-defvar
-  "Detect and create variables."
+  "Detect variables."
   wisent-clojure-def-regexp 'DEF)
 
 ;; Define the lexer for this grammar
