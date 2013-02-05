@@ -3,7 +3,7 @@
 ;; Copyright (C) 
 
 ;; Author: Pierre Allix <pal@elan-pallix>
-;; Created: 2013-02-05 17:25:55+0100
+;; Created: 2013-02-05 18:38:50+0100
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -56,15 +56,14 @@
       (VAR_READER)
       (META_READER)
       (METADATA)
+      (NS)
+      (SYMBOL)
       (DEF)
       (DEFN))
      ("number"
       (NUMBER_LITERAL))
      ("string"
       (STRING_LITERAL))
-     ("symbol"
-      (NS . "\\`ns\\'")
-      (IDENTIFIER))
      ("close-paren"
       (RBRACK . "]")
       (RBRACE . "}")
@@ -79,7 +78,6 @@
       (PAREN_BLOCK . "(LPAREN RPAREN)")))
    '(("number" :declared t)
      ("string" :declared t)
-     ("symbol" :declared t)
      ("block" :declared t)))
   "Table of lexical tokens.")
 
@@ -88,7 +86,7 @@
     (eval-when-compile
       (require 'semantic/wisent/comp))
     (wisent-compile-grammar
-     '((PAREN_BLOCK BRACE_BLOCK BRACK_BLOCK LPAREN RPAREN LBRACE RBRACE LBRACK RBRACK IDENTIFIER NS STRING_LITERAL NUMBER_LITERAL DEFN DEF METADATA META_READER VAR_READER SET_READER FN_READER EVAL_READER COMMENT_READER UNREADABLE_READER DISCARD_READER)
+     '((PAREN_BLOCK BRACE_BLOCK BRACK_BLOCK LPAREN RPAREN LBRACE RBRACE LBRACK RBRACK STRING_LITERAL NUMBER_LITERAL DEFN DEF SYMBOL NS METADATA META_READER VAR_READER SET_READER FN_READER EVAL_READER COMMENT_READER UNREADABLE_READER DISCARD_READER)
        nil
        (sexpr
         ((PAREN_BLOCK)
@@ -96,21 +94,21 @@
           (car $region1)
           (cdr $region1)
           'list_content_opt))
-        ((IDENTIFIER)))
+        ((SYMBOL)))
        (list_content_opt
         (nil)
         ((list_content)))
        (list_content
-        ((DEF metadata_defs_opt IDENTIFIER list_content_opt)
+        ((DEF metadata_defs_opt SYMBOL list_content_opt)
          (wisent-raw-tag
           (semantic-tag-new-variable $3 nil nil)))
-        ((DEFN metadata_defs_opt IDENTIFIER doc_string_opt metadata_defs_opt fn_content_def)
+        ((DEFN metadata_defs_opt SYMBOL doc_string_opt metadata_defs_opt fn_content_def)
          (wisent-raw-tag
           (semantic-tag-new-function $3 nil
                                      (car $6)
                                      :arity
                                      (cadr $6))))
-        ((NS metadata_defs_opt IDENTIFIER)
+        ((NS metadata_defs_opt SYMBOL)
          (wisent-raw-tag
           (semantic-tag-new-package $3 nil))))
        (doc_string_opt
@@ -124,7 +122,7 @@
         ((metadata_defs metadata_def)))
        (metadata_def
         ((METADATA BRACE_BLOCK))
-        ((METADATA IDENTIFIER)
+        ((METADATA SYMBOL)
          (list $2)))
        (fn_content_simple_arity
         ((BRACK_BLOCK)
@@ -155,10 +153,10 @@
           (car $1)
           $1)))
        (argument
-        ((IDENTIFIER)
+        ((SYMBOL)
          (wisent-raw-tag
           (semantic-tag-new-variable $1 nil nil)))
-        ((metadata_def IDENTIFIER)
+        ((metadata_def SYMBOL)
          (wisent-raw-tag
           (semantic-tag-new-variable $2
                                      (car $1)
@@ -195,12 +193,6 @@
     ("}" RBRACE)
     ("]" RBRACK))
   )
-
-(define-lex-regex-type-analyzer wisent-clojure-wy--<symbol>-regexp-analyzer
-  "regexp analyzer for <symbol> tokens."
-  "\\(\\sw\\|\\s_\\)+"
-  '((NS . "\\`ns\\'"))
-  'IDENTIFIER)
 
 (define-lex-regex-type-analyzer wisent-clojure-wy--<number>-regexp-analyzer
   "regexp analyzer for <number> tokens."

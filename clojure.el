@@ -89,7 +89,6 @@ It ignores whitespaces, newlines and comments."
   ;;;; Auto-generated analyzers.
   wisent-clojure-wy--<number>-regexp-analyzer
   wisent-clojure-wy--<string>-sexp-analyzer
-  wisent-clojure-wy--<symbol>-regexp-analyzer
   wisent-clojure-wy--<block>-block-analyzer
   semantic-lex-default-action)
 
