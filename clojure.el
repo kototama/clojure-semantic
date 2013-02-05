@@ -83,9 +83,9 @@ It ignores whitespaces, newlines and comments."
   semantic-lex-ignore-comments
   ;;; our own lexers:
   wisent-clojure-lex-reader
-  wisent-clojure-lex-clj-symbol
   wisent-clojure-lex-deffunc
   wisent-clojure-lex-defvar
+  wisent-clojure-lex-clj-symbol
   ;;;; Auto-generated analyzers.
   wisent-clojure-wy--<number>-regexp-analyzer
   wisent-clojure-wy--<string>-sexp-analyzer

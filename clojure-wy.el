@@ -3,7 +3,7 @@
 ;; Copyright (C) 
 
 ;; Author: Pierre Allix <pal@elan-pallix>
-;; Created: 2013-02-05 18:38:50+0100
+;; Created: 2013-02-05 18:47:17+0100
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -90,10 +90,10 @@
        nil
        (sexpr
         ((PAREN_BLOCK)
-         (semantic-bovinate-from-nonterminal
+         (semantic-parse-region
           (car $region1)
           (cdr $region1)
-          'list_content_opt))
+          'list_content_opt 1))
         ((SYMBOL)))
        (list_content_opt
         (nil)
@@ -121,6 +121,7 @@
         ((metadata_def))
         ((metadata_defs metadata_def)))
        (metadata_def
+        ((BRACE_BLOCK))
         ((METADATA BRACE_BLOCK))
         ((METADATA SYMBOL)
          (list $2)))

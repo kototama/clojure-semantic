@@ -79,7 +79,7 @@
 %%
 
 sexpr: PAREN_BLOCK
-       (EXPAND $1 list_content_opt)
+       (EXPANDFULL $1 list_content_opt)
      | SYMBOL
      ;; | NUMBER_LITERAL
      ;; | STRING_LITERAL
@@ -109,7 +109,8 @@ metadata_defs: metadata_def
              | metadata_defs metadata_def
              ;
 
-metadata_def: METADATA BRACE_BLOCK
+metadata_def: BRACE_BLOCK
+            | METADATA BRACE_BLOCK
             | METADATA SYMBOL
               (list $2)
             ;
