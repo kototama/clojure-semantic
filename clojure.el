@@ -63,7 +63,7 @@
      token-type
      (match-beginning 0) (match-end 0)))))
 
-(define-lex-regex-analyzer wisent-clojure-lex-clj-identifier
+(define-lex-regex-analyzer wisent-clojure-lex-clj-symbol
   "Detect Clojure symbols."
   "\\([^][(){}\"\n\t ]+\\)"
   (let* ((matched (match-string-no-properties 0))
@@ -83,7 +83,7 @@ It ignores whitespaces, newlines and comments."
   semantic-lex-ignore-comments
   ;;; our own lexers:
   wisent-clojure-lex-reader
-  wisent-clojure-lex-clj-identifier
+  wisent-clojure-lex-clj-symbol
   wisent-clojure-lex-deffunc
   wisent-clojure-lex-defvar
   ;;;; Auto-generated analyzers.
