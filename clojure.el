@@ -68,7 +68,7 @@
   "\\([^][(){}\"\n\t ]+\\)"
   (let* ((matched (match-string-no-properties 0))
          (token-type (cond ((string= matched "ns") 'NS)
-                           (t 'IDENTIFIER))))
+                           (t 'SYMBOL))))
    (semantic-lex-push-token
     (semantic-lex-token
      token-type
