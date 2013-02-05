@@ -3,7 +3,7 @@
 ;; Copyright (C) 
 
 ;; Author: Pierre Allix <pal@elan-pallix>
-;; Created: 2012-11-26 14:39:21+0100
+;; Created: 2013-02-05 17:25:55+0100
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -40,14 +40,22 @@
 ;;; Declarations
 ;;
 (defconst wisent-clojure-wy--keyword-table
-  (semantic-lex-make-keyword-table
-   '(("throw" . THROW))
-   '(("throw" summary "throw")))
+  (semantic-lex-make-keyword-table 'nil 'nil)
   "Table of language keywords.")
 
 (defconst wisent-clojure-wy--token-table
   (semantic-lex-make-type-table
    '(("<no-type>"
+      (UNREADABLE_READER)
+      (DISCARD_READER)
+      (UNREADABLE_READER)
+      (COMMENT_READER)
+      (EVAL_READER)
+      (FN_READER)
+      (SET_READER)
+      (VAR_READER)
+      (META_READER)
+      (METADATA)
       (DEF)
       (DEFN))
      ("number"
@@ -57,16 +65,6 @@
      ("symbol"
       (NS . "\\`ns\\'")
       (IDENTIFIER))
-     ("punctuation"
-      (METADATA . "^")
-      (DISCARD_READER . "#_")
-      (UNREADABLE_READER . "#<")
-      (COMMENT_READER . "#!")
-      (EVAL_READER . "#=")
-      (FN_READER . "#(")
-      (SET_READER . "#{")
-      (VAR_READER . "#'")
-      (META_READER . "#^"))
      ("close-paren"
       (RBRACK . "]")
       (RBRACE . "}")
@@ -79,11 +77,9 @@
       (BRACK_BLOCK . "(LBRACK RBRACK)")
       (BRACE_BLOCK . "(LBRACE RBRACE)")
       (PAREN_BLOCK . "(LPAREN RPAREN)")))
-   '(("keyword" :declared t)
-     ("number" :declared t)
+   '(("number" :declared t)
      ("string" :declared t)
      ("symbol" :declared t)
-     ("punctuation" :declared t)
      ("block" :declared t)))
   "Table of lexical tokens.")
 
@@ -92,53 +88,82 @@
     (eval-when-compile
       (require 'semantic/wisent/comp))
     (wisent-compile-grammar
-     '((PAREN_BLOCK BRACE_BLOCK BRACK_BLOCK LPAREN RPAREN LBRACE RBRACE LBRACK RBRACK META_READER VAR_READER SET_READER FN_READER EVAL_READER COMMENT_READER UNREADABLE_READER DISCARD_READER METADATA IDENTIFIER NS STRING_LITERAL NUMBER_LITERAL THROW DEFN DEF)
+     '((PAREN_BLOCK BRACE_BLOCK BRACK_BLOCK LPAREN RPAREN LBRACE RBRACE LBRACK RBRACK IDENTIFIER NS STRING_LITERAL NUMBER_LITERAL DEFN DEF METADATA META_READER VAR_READER SET_READER FN_READER EVAL_READER COMMENT_READER UNREADABLE_READER DISCARD_READER)
        nil
        (sexpr
         ((PAREN_BLOCK)
-         (semantic-parse-region
-          (car $region1)
-          (cdr $region1)
-          'list 1)))
-       (list
-        ((DEF metadata_def_opt IDENTIFIER)
-         (wisent-raw-tag
-          (semantic-tag-new-variable $3 nil nil)))
-        ((DEFN IDENTIFIER arguments_block)
-         (wisent-raw-tag
-          (semantic-tag-new-function $2 nil $3)))
-        ((NS metadata_def_opt IDENTIFIER)
-         (wisent-raw-tag
-          (semantic-tag-new-package $3 nil))))
-       (metadata_def_opt
-        (nil)
-        ((metadata_def)))
-       (metadata_def
-        ((METADATA BRACE_BLOCK)))
-       (arguments_block
-        ((BRACK_BLOCK)
          (semantic-bovinate-from-nonterminal
           (car $region1)
           (cdr $region1)
-          'arguments_list)))
-       (arguments_list
-        ((LBRACK arguments_def_opt RBRACK)
-         (identity $2)))
-       (arguments_def_opt
+          'list_content_opt))
+        ((IDENTIFIER)))
+       (list_content_opt
         (nil)
-        ((arguments_def)
-         (identity $1)))
-       (arguments_def
-        ((argument)
-         (list $1))
-        ((argument arguments_def)
-         (cons $1 $2)))
+        ((list_content)))
+       (list_content
+        ((DEF metadata_defs_opt IDENTIFIER list_content_opt)
+         (wisent-raw-tag
+          (semantic-tag-new-variable $3 nil nil)))
+        ((DEFN metadata_defs_opt IDENTIFIER doc_string_opt metadata_defs_opt fn_content_def)
+         (wisent-raw-tag
+          (semantic-tag-new-function $3 nil
+                                     (car $6)
+                                     :arity
+                                     (cadr $6))))
+        ((NS metadata_defs_opt IDENTIFIER)
+         (wisent-raw-tag
+          (semantic-tag-new-package $3 nil))))
+       (doc_string_opt
+        (nil)
+        ((STRING_LITERAL)))
+       (metadata_defs_opt
+        (nil)
+        ((metadata_defs)))
+       (metadata_defs
+        ((metadata_def))
+        ((metadata_defs metadata_def)))
+       (metadata_def
+        ((METADATA BRACE_BLOCK))
+        ((METADATA IDENTIFIER)
+         (list $2)))
+       (fn_content_simple_arity
+        ((BRACK_BLOCK)
+         (semantic-parse-region
+          (car $region1)
+          (cdr $region1)
+          'argument 1)))
+       (fn_content_multi_arity
+        ((PAREN_BLOCK)
+         (list
+          (semantic-parse-region
+           (car $region1)
+           (cdr $region1)
+           'fn_content_simple_arity 1)))
+        ((PAREN_BLOCK fn_content_multi_arity)
+         (append
+          (list
+           (semantic-parse-region
+            (car $region1)
+            (cdr $region1)
+            'fn_content_simple_arity 1)
+           (list $2)))))
+       (fn_content_def
+        ((fn_content_simple_arity)
+         (list $1 nil))
+        ((fn_content_multi_arity)
+         (list
+          (car $1)
+          $1)))
        (argument
         ((IDENTIFIER)
-         (wisent-cook-tag
-          (wisent-raw-tag
-           (semantic-tag-new-variable $1 nil nil))))))
-     '(sexpr list arguments_list)))
+         (wisent-raw-tag
+          (semantic-tag-new-variable $1 nil nil)))
+        ((metadata_def IDENTIFIER)
+         (wisent-raw-tag
+          (semantic-tag-new-variable $2
+                                     (car $1)
+                                     nil)))))
+     '(sexpr list_content_opt argument fn_content_simple_arity)))
   "Parser table.")
 
 (defun wisent-clojure-wy--install-parser ()
@@ -183,28 +208,10 @@
   nil
   'NUMBER_LITERAL)
 
-(define-lex-string-type-analyzer wisent-clojure-wy--<punctuation>-string-analyzer
-  "string analyzer for <punctuation> tokens."
-  "\\(\\s.\\|\\s$\\|\\s'\\)+"
-  '((METADATA . "^")
-    (DISCARD_READER . "#_")
-    (UNREADABLE_READER . "#<")
-    (COMMENT_READER . "#!")
-    (EVAL_READER . "#=")
-    (FN_READER . "#(")
-    (SET_READER . "#{")
-    (VAR_READER . "#'")
-    (META_READER . "#^"))
-  'punctuation)
-
 (define-lex-sexp-type-analyzer wisent-clojure-wy--<string>-sexp-analyzer
   "sexp analyzer for <string> tokens."
   "\\s\""
   'STRING_LITERAL)
-
-(define-lex-keyword-type-analyzer wisent-clojure-wy--<keyword>-keyword-analyzer
-  "keyword analyzer for <keyword> tokens."
-  "\\(\\sw\\|\\s_\\)+")
 
 
 ;;; Epilogue
