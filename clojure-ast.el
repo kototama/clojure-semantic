@@ -33,7 +33,7 @@ the Clojure data as an ELisp object."
 (defun wisent-clojure-project-dependencies
   ()
   "Returns a list of lists representing the project dependencies."
-  (when (string-match "project.clj$" (buffer-name))
+  (when (string-match "project.clj$" (buffer-file-name))
     (let* ((ptag (wisent-clojure-find-project-tag))
            (depsdef (wisent-clojure-find-project-deps ptag))
            (deps (wisent-clojure-ast-parse depsdef)))
