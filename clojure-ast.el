@@ -30,7 +30,7 @@ the Clojure data a an ELisp object."
           ((eq type 'string)
            (car ast)))))
 
-(defun wisent-clojure-project-get-dependencies
+(defun wisent-clojure-project-dependencies
   ()
   "Returns a list of lists representing the project dependencies."
   (when (string-match "project.clj$" (buffer-name))
