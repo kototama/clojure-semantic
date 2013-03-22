@@ -21,7 +21,7 @@ within the project.clj buffer."
 (defun wisent-clojure-ast-parse
   (ast)
   "Parse the semantic AST and returns the content of
-the Clojure data a an ELisp object."
+the Clojure data as an ELisp object."
   (let ((type (cadr ast)))
     (cond ((eq type 'vector) 
            (mapcar 'wisent-clojure-ast-parse (cadr (caddr ast))))
