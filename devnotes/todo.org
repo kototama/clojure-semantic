@@ -11,26 +11,12 @@ add Lang:
 http://cedet.sourceforge.net/addlang.shtml
 
 * TODO
-** try removing the string in the first rule
+
+** extend parse-ast and grammar for list/number
+** improve code: search for filter and assoc/list equivalent
 ** replacing expandfull by expand in the first rule
-** parsing of defproject
-
-(defn alter-meta!
-  "Atomically sets the metadata for a namespace/var/ref/agent/atom to be:
-
-  (apply f its-current-meta args)
-
-  f must be free of side-effects"
-  {:added "1.0"
-   :static true}
- [^clojure.lang.IReference iref f & args] (.alterMeta iref f args))
-
-  ** collect import for ns
+** collect import for ns
   
-** speedbar not working on:
-(defn ^:static ^clojure.lang.ChunkBuffer kchunk-buffer ^clojure.lang.ChunkBuffer [capacity]
-  (clojure.lang.ChunkBuffer. capacity))
-
 * context parsing
   The Semantic analyzer is a complex engine which has been broken down across several modules. When the Semantic analyzer fails, start with semantic-analyze-debug-assist, then dive into some of these files.
   
