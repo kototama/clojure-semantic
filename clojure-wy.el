@@ -2,8 +2,8 @@
 
 ;; Copyright (C) 
 
-;; Author: Pierre Allix <pal@elan-pallix>
-;; Created: 2013-02-05 18:47:17+0100
+;; Author: Pierre Allix <pierre.allix@fokus.fraunhofer.de>
+;; Created: 2013-03-22 10:25:49+0100
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 

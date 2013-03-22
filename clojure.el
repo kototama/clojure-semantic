@@ -40,12 +40,13 @@
 
 (define-lex-regex-analyzer wisent-clojure-lex-reader
   "Detect reader macros or metadata symbol."
-  "\\(#[^ ]\\|\\^\\|`\\|'\\|~@\\|~\\|\\\\\\|@\\)"
+  "\\(#[^ ]\\|\\^\\|`\\|'\\|~@\\|~\\|\\\\.\\|@\\)"
   (let* ((matched (match-string-no-properties 0))
+         (_ (message "matched: %s" matched))
          (token-type (cond ((string= matched "^") 'METADATA)
                            ((string= matched "`") 'BACKQUOTE)
                            ((string= matched "'") 'QUOTE)
-                           ((string= matched "\\") 'CHARACTER)
+                           ((string= (substring matched 0 1) "\\") 'CHARACTER)
                            ((string= matched "~") 'UNQUOTE)
                            ((string= matched "~@") 'UNQUOTE_SPLICING)
                            ((string= matched "@") 'DEREF)
