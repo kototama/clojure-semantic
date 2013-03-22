@@ -34,7 +34,7 @@
 %start list_content_opt
 %start argument
 %start fn_content_simple_arity
-%start collection_content_full
+%start sexpr_full
 
 ;; -----------------------------
 ;; Block & Parenthesis terminals
@@ -102,14 +102,17 @@ list_content: DEF metadata_defs_opt SYMBOL list_content_opt
     ;
 
 sexpr_full: SYMBOL
-            (list 'symbol $1)
+            (TAG $1 'symbol)
           | NUMBER_LITERAL
             (list 'number $1)
           | STRING_LITERAL
-            (list 'string $1)
-          ;; | BRACE_BLOCK
-          ;;   (EXPAND $1 collection_content_full)
-         ;; TODO: map, vector etc.
+            (TAG (car (read-from-string $1)) 'string)
+          | PAREN_BLOCK
+            (TAG (symbol-name (gensym "list")) 'list :content (EXPANDFULL $1 sexpr_full))
+          | BRACE_BLOCK
+            (TAG (symbol-name (gensym "set")) 'set :content (EXPANDFULL $1 sexpr_full))
+          | BRACK_BLOCK
+            (TAG (symbol-name (gensym "vector")) 'vector :content (EXPANDFULL $1 sexpr_full))
           ;
 
 collection_content_full: sexpr_full

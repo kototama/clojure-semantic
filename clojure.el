@@ -38,11 +38,14 @@
   "Detect variables."
   wisent-clojure-def-regexp 'DEF)
 
+(define-lex-simple-regex-analyzer wisent-clojure-lex-defproject
+  "Detect projects definition."
+  "defproject" 'DEFPROJECT)
+
 (define-lex-regex-analyzer wisent-clojure-lex-reader
   "Detect reader macros or metadata symbol."
   "\\(#[^ ]\\|\\^\\|`\\|'\\|~@\\|~\\|\\\\.\\|@\\)"
   (let* ((matched (match-string-no-properties 0))
-         (_ (message "matched: %s" matched))
          (token-type (cond ((string= matched "^") 'METADATA)
                            ((string= matched "`") 'BACKQUOTE)
                            ((string= matched "'") 'QUOTE)
@@ -84,8 +87,9 @@ It ignores whitespaces, newlines and comments."
   semantic-lex-ignore-comments
   ;;; our own lexers:
   wisent-clojure-lex-reader
+  wisent-clojure-lex-defproject
   wisent-clojure-lex-deffunc
-  wisent-clojure-lex-defvar
+  wisent-clojure-lex-defvar 
   wisent-clojure-lex-clj-symbol
   ;;;; Auto-generated analyzers.
   wisent-clojure-wy--<number>-regexp-analyzer

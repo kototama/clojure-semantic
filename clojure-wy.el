@@ -3,7 +3,7 @@
 ;; Copyright (C) 
 
 ;; Author: Pierre Allix <pierre.allix@fokus.fraunhofer.de>
-;; Created: 2013-03-22 10:25:49+0100
+;; Created: 2013-03-22 12:22:39+0100
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -58,6 +58,7 @@
       (METADATA)
       (NS)
       (SYMBOL)
+      (DEFPROJECT)
       (DEF)
       (DEFN))
      ("number"
@@ -86,7 +87,7 @@
     (eval-when-compile
       (require 'semantic/wisent/comp))
     (wisent-compile-grammar
-     '((PAREN_BLOCK BRACE_BLOCK BRACK_BLOCK LPAREN RPAREN LBRACE RBRACE LBRACK RBRACK STRING_LITERAL NUMBER_LITERAL DEFN DEF SYMBOL NS METADATA META_READER VAR_READER SET_READER FN_READER EVAL_READER COMMENT_READER UNREADABLE_READER DISCARD_READER)
+     '((PAREN_BLOCK BRACE_BLOCK BRACK_BLOCK LPAREN RPAREN LBRACE RBRACE LBRACK RBRACK STRING_LITERAL NUMBER_LITERAL DEFN DEF DEFPROJECT SYMBOL NS METADATA META_READER VAR_READER SET_READER FN_READER EVAL_READER COMMENT_READER UNREADABLE_READER DISCARD_READER)
        nil
        (sexpr
         ((PAREN_BLOCK)
@@ -110,7 +111,57 @@
                                      (cadr $6))))
         ((NS metadata_defs_opt SYMBOL)
          (wisent-raw-tag
-          (semantic-tag-new-package $3 nil))))
+          (semantic-tag-new-package $3 nil)))
+        ((DEFPROJECT SYMBOL STRING_LITERAL collection_content_full)
+         (wisent-raw-tag
+          (semantic-tag "project" 'project :name $2 :version $3 :properties $4))))
+       (sexpr_full
+        ((SYMBOL)
+         (wisent-raw-tag
+          (semantic-tag $1 'symbol)))
+        ((NUMBER_LITERAL)
+         (list 'number $1))
+        ((STRING_LITERAL)
+         (wisent-raw-tag
+          (semantic-tag
+           (car
+            (read-from-string $1))
+           'string)))
+        ((PAREN_BLOCK)
+         (wisent-raw-tag
+          (semantic-tag
+           (symbol-name
+            (gensym "list"))
+           'list :content
+           (semantic-parse-region
+            (car $region1)
+            (cdr $region1)
+            'sexpr_full 1))))
+        ((BRACE_BLOCK)
+         (wisent-raw-tag
+          (semantic-tag
+           (symbol-name
+            (gensym "set"))
+           'set :content
+           (semantic-parse-region
+            (car $region1)
+            (cdr $region1)
+            'sexpr_full 1))))
+        ((BRACK_BLOCK)
+         (wisent-raw-tag
+          (semantic-tag
+           (symbol-name
+            (gensym "vector"))
+           'vector :content
+           (semantic-parse-region
+            (car $region1)
+            (cdr $region1)
+            'sexpr_full 1)))))
+       (collection_content_full
+        ((sexpr_full)
+         (list $1))
+        ((sexpr_full collection_content_full)
+         (cons $1 $2)))
        (doc_string_opt
         (nil)
         ((STRING_LITERAL)))
@@ -162,7 +213,7 @@
           (semantic-tag-new-variable $2
                                      (car $1)
                                      nil)))))
-     '(sexpr list_content_opt argument fn_content_simple_arity)))
+     '(sexpr list_content_opt argument fn_content_simple_arity sexpr_full)))
   "Parser table.")
 
 (defun wisent-clojure-wy--install-parser ()
